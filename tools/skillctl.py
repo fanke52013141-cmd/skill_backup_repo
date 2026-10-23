@@ -34,14 +34,14 @@ MANIFEST = REPO / "manifest.json"
 
 TARGET = Path.home() / ".workbuddy" / "skills"
 STATE_FILE = TARGET / ".skillctl.json"
-BACKUP_DIR = TARGET / ".skillctl_backup"
+BACKUP_DIR = TARGET.parent / ".skillctl_backup"
 
 
 def set_target(raw: str) -> None:
     global TARGET, STATE_FILE, BACKUP_DIR
     TARGET = Path(raw).expanduser().resolve()
     STATE_FILE = TARGET / ".skillctl.json"
-    BACKUP_DIR = TARGET / ".skillctl_backup"
+    BACKUP_DIR = TARGET.parent / ".skillctl_backup"
 
 EXCLUDE_DIRS = {"__pycache__", ".git", "node_modules", ".skillctl_backup"}
 EXCLUDE_SUFFIX = {".pyc", ".pyo", ".DS_Store"}
