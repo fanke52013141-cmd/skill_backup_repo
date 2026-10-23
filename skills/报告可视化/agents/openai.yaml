@@ -1,0 +1,9 @@
+interface:
+  display_name: "paper navy visual report"
+policy:
+  products:
+    - "chatgpt"
+    - "codex"
+    - "api"
+    - "atlas"
+  allow_implicit_invocation: true

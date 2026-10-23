@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Paper Navy Visual Report — Starter</title>
+<style>
+:root {
+  --ink-navy: #1a2b49;
+  --ink-navy-light: #2d4270;
+  --ink-navy-soft: #e8edf5;
+  --amber-deep: #c47a1f;
+  --amber: #e89a3c;
+  --amber-light: #f5c97a;
+  --amber-soft: #fdf3e3;
+  --paper: #faf8f3;
+  --paper-dark: #f0ece2;
+  --ink: #2a2a2a;
+  --ink-soft: #5a5a5a;
+  --ink-light: #8a8a8a;
+  --border: #e0dbd0;
+  --success: #3a7d5a;
+  --warning: #c47a1f;
+  --shadow-soft: 0 2px 20px rgba(26, 43, 73, 0.06);
+  --shadow-card: 0 8px 32px rgba(26, 43, 73, 0.08);
+  --shadow-hover: 0 12px 40px rgba(26, 43, 73, 0.12);
+  --sidebar-w: 264px;
+  --body-fs: 14px;
+  --gutter: calc(var(--body-fs) * 6);
+  --edge-pad: 8px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:"Noto Sans SC","PingFang SC","Microsoft YaHei",sans-serif;background:var(--paper);color:var(--ink);font-size:15px;line-height:1.7;overflow-x:hidden}
+a{color:inherit}
+button{font:inherit}
+.app-shell{min-height:100vh}
+.sidebar{position:fixed;inset:0 auto 0 0;width:var(--sidebar-w);background:rgba(250,248,243,.94);backdrop-filter:blur(18px);border-right:1px solid var(--border);z-index:60;display:flex;flex-direction:column;transition:transform .25s ease}
+.brand{padding:22px 22px 18px;border-bottom:1px solid var(--border)}
+.brand-line{display:flex;align-items:center;gap:10px;color:var(--ink-navy);font-weight:700;font-size:15px}
+.brand-dot{width:10px;height:10px;border-radius:50%;background:linear-gradient(135deg,var(--ink-navy),var(--amber));box-shadow:0 0 0 4px rgba(26,43,73,.035)}
+.brand-meta{margin-top:5px;color:var(--ink-light);font-size:11px;letter-spacing:.5px}
+.menu{padding:16px 12px;overflow-y:auto;min-height:0;flex:1;scrollbar-width:thin;scrollbar-color:var(--border) transparent}
+.menu::-webkit-scrollbar{width:6px}
+.menu::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
+.menu::-webkit-scrollbar-thumb:hover{background:var(--ink-light)}
+.menu::-webkit-scrollbar-track{background:transparent}
+.menu-group{margin-bottom:4px}
+.menu-row{display:flex;align-items:center;gap:8px}
+.menu-link,.menu-toggle{border:0;background:transparent;display:flex;align-items:center;gap:10px;width:100%;min-height:40px;padding:8px 12px;border-radius:9px;text-decoration:none;color:var(--ink-soft);font-size:13px;font-weight:500;cursor:pointer;text-align:left;transition:background .2s ease,color .2s ease}
+.menu-link:hover,.menu-toggle:hover{color:var(--ink-navy);background:rgba(26,43,73,.035)}
+.menu-link.active,.menu-toggle.active{color:var(--ink-navy);background:var(--ink-navy-soft);font-weight:600}
+.menu-index{width:20px;font-family:Georgia,"Times New Roman",serif;font-size:11px;color:var(--ink-light)}
+.menu-link.active .menu-index,.menu-toggle.active .menu-index{color:var(--amber-deep)}
+.chevron{margin-left:auto;color:var(--ink-light);transition:transform .2s ease}
+.menu-group.open .chevron{transform:rotate(90deg)}
+.submenu{display:none;margin:3px 0 8px 29px;padding-left:10px;border-left:1px solid var(--border)}
+.menu-group.open .submenu{display:block}
+.submenu a{display:block;padding:7px 10px;border-radius:8px;text-decoration:none;color:var(--ink-light);font-size:12px;line-height:1.4;transition:background .2s,color .2s}
+.submenu a:hover{color:var(--ink-navy)}
+.submenu a.active{color:var(--ink-navy);background:rgba(232,237,245,.72)}
+.sidebar-foot{padding:14px 22px 18px;border-top:1px solid var(--border);color:var(--ink-light);font-size:11px}
+.main{margin-left:var(--sidebar-w);min-width:0}
+.mobile-bar{display:none;position:sticky;top:0;z-index:55;height:60px;align-items:center;justify-content:space-between;padding:0 18px;background:rgba(250,248,243,.9);backdrop-filter:blur(16px);border-bottom:1px solid var(--border)}
+.mobile-brand{font-weight:700;color:var(--ink-navy);display:flex;align-items:center;gap:9px}
+.mobile-menu-btn{border:1px solid var(--border);background:var(--paper);border-radius:9px;padding:7px 10px;color:var(--ink-navy);cursor:pointer}
+.overlay{display:none;position:fixed;inset:0;background:rgba(26,43,73,.22);z-index:58}
+.content{width:100%;max-width:1440px;margin:0 auto;padding:0 var(--edge-pad) 0 var(--gutter);box-sizing:border-box}
+.hero{padding:86px 0 76px;scroll-margin-top:24px}
+.eyebrow{display:flex;align-items:center;gap:12px;margin-bottom:18px;color:var(--amber-deep);font-size:12px;font-weight:600;letter-spacing:3px;text-transform:uppercase}
+.eyebrow:before{content:"";width:32px;height:1px;background:var(--amber-deep)}
+.hero h1,.section-title,.card-title{font-family:"Noto Serif SC","Songti SC","STSong",serif;color:var(--ink-navy)}
+.hero h1{font-size:clamp(38px,5vw,64px);line-height:1.17;max-width:900px;margin-bottom:22px}
+.hero h1 em{font-style:normal;color:var(--amber-deep)}
+.hero-copy{max-width:700px;color:var(--ink-soft);font-size:17px;line-height:1.85}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;margin-top:54px;background:var(--border);border:1px solid var(--border);border-radius:12px;overflow:hidden}
+.stat{background:var(--paper);padding:23px 26px}.stat strong{display:block;font-family:Georgia,"Noto Serif SC",serif;font-size:31px;line-height:1.2;color:var(--ink-navy);margin-bottom:6px}.stat:nth-child(even) strong{color:var(--amber-deep)}.stat span{font-size:12px;color:var(--ink-soft)}
+.section{padding:86px 0;scroll-margin-top:24px}.section.band{position:relative;margin:0 calc(-1 * var(--edge-pad)) 0 calc(-1 * var(--gutter));padding:86px var(--edge-pad) 86px var(--gutter)}.section.band:before{content:"";position:absolute;z-index:-1;inset:0;background:var(--paper-dark)}
+.section-head{display:flex;align-items:flex-end;justify-content:space-between;gap:30px;margin-bottom:46px}.section-label{color:var(--amber-deep);font-size:12px;font-weight:600;letter-spacing:2.5px;text-transform:uppercase;margin-bottom:8px}.section-title{font-size:clamp(28px,3.5vw,40px);line-height:1.28}.section-desc{max-width:42%;color:var(--ink-soft);font-size:13px;text-align:right}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}.card{background:var(--paper);border:1px solid var(--border);border-radius:14px;padding:27px;transition:transform .25s ease,box-shadow .25s ease}.card:hover{transform:translateY(-2px);box-shadow:var(--shadow-hover)}.icon{width:44px;height:44px;border-radius:10px;background:var(--ink-navy-soft);color:var(--ink-navy);display:grid;place-items:center;margin-bottom:16px;font-weight:700}.card-title{font-size:18px;margin-bottom:7px}.card p{font-size:13px;color:var(--ink-soft)}
+.dual{display:grid;grid-template-columns:1fr auto 1fr;border:1px solid var(--border);border-radius:20px;overflow:hidden;box-shadow:var(--shadow-card);background:var(--paper)}.dual-pane{padding:38px}.dual-pane.a{background:linear-gradient(180deg,#f5f7fb 0%,var(--paper) 100%)}.dual-pane.b{background:linear-gradient(180deg,var(--amber-soft) 0%,var(--paper) 100%)}.dual-divider{width:1px;background:var(--border);position:relative}.dual-divider:after{content:"&";position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:46px;height:46px;border-radius:50%;display:grid;place-items:center;background:var(--paper);border:1px solid var(--border);font-family:Georgia,serif;color:var(--ink-light);font-weight:700}.dual-kicker{font-size:11px;color:var(--ink-light);margin-bottom:8px}.dual h3{font-family:"Noto Serif SC","Songti SC",serif;font-size:26px;color:var(--ink-navy);margin-bottom:12px}.dual-pane.b h3{color:var(--amber-deep)}.tags{display:flex;gap:7px;flex-wrap:wrap;margin-top:18px}.tag{font-size:11px;padding:4px 10px;border-radius:999px;background:var(--ink-navy-soft);color:var(--ink-navy)}.dual-pane.b .tag{background:var(--amber-soft);color:var(--amber-deep);border:1px solid rgba(196,122,31,.08)}
+.tabs{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:24px}.tab{border:1px solid var(--border);background:var(--paper);color:var(--ink-soft);padding:9px 16px;border-radius:9px;cursor:pointer}.tab.active{background:var(--ink-navy);border-color:var(--ink-navy);color:#fff}.tab-panel{border:1px solid var(--border);background:var(--paper);border-radius:14px;padding:28px}.tab-panel p{color:var(--ink-soft)}
+.table-wrap{overflow:visible;border:1px solid var(--border);border-radius:14px;background:var(--paper)}table{width:100%;border-collapse:collapse}th{background:var(--ink-navy);color:#fff;padding:14px 18px;text-align:left;font-size:12px;font-weight:600}td{padding:15px 18px;border-bottom:1px solid var(--border);font-size:13px;color:var(--ink-soft);vertical-align:top}tr:last-child td{border-bottom:0}tbody tr:hover td{background:rgba(26,43,73,.02)}.badge{display:inline-block;padding:3px 9px;border-radius:999px;font-size:11px;font-weight:600;background:var(--ink-navy-soft);color:var(--ink-navy)}.badge.amber{background:var(--amber-soft);color:var(--amber-deep)}
+.callout{margin-top:22px;padding:17px 20px;border-radius:11px;background:rgba(26,43,73,.04);border-left:3px solid var(--ink-navy);color:var(--ink-navy);font-size:13px}.callout.amber{background:rgba(232,154,60,.08);border-left-color:var(--amber);color:#8a5a15}
+.footer{padding:42px 0 52px;color:var(--ink-light);font-size:12px;border-top:1px solid var(--border);margin-top:40px}
+@media(max-width:900px){
+  .sidebar{width:min(84vw,320px);transform:translateX(-100%);box-shadow:var(--shadow-card)}
+  .sidebar.open{transform:translateX(0)}
+  .overlay.show{display:block}
+  .main{margin-left:0}
+  .mobile-bar{display:flex}
+  .content{width:100%;padding:0 16px}
+  .table-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
+  table{min-width:560px}
+  .hero{padding:58px 0 54px}
+  .stats{grid-template-columns:repeat(2,1fr)}
+  .grid-3{grid-template-columns:1fr}
+  .dual{grid-template-columns:1fr}.dual-divider{height:1px;width:100%}.dual-divider:after{top:50%;left:50%}
+  .section{padding:62px 0}.section-head{align-items:flex-start;flex-direction:column;margin-bottom:34px}.section.band{margin:0 -16px;padding:62px 16px}
+}
+@media(max-width:520px){.stats{grid-template-columns:1fr}.hero-copy{font-size:15px}.dual-pane{padding:27px}.card{padding:22px}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
+</style>
+</head>
+<body>
+<div class="app-shell">
+  <aside class="sidebar" id="sidebar" aria-label="报告目录">
+    <div class="brand"><div class="brand-line"><span class="brand-dot"></span>视觉报告示例</div><div class="brand-meta">PAPER · NAVY · AMBER</div></div>
+    <nav class="menu">
+      <div class="menu-group open"><a class="menu-link active" href="#overview"><span class="menu-index">01</span>总览</a></div>
+      <div class="menu-group open">
+        <button class="menu-toggle" type="button"><span class="menu-index">02</span>核心分析<span class="chevron">›</span></button>
+        <div class="submenu"><a href="#principles">设计原则</a><a href="#comparison">方案对照</a></div>
+      </div>
+      <div class="menu-group open">
+        <button class="menu-toggle" type="button"><span class="menu-index">03</span>落地方案<span class="chevron">›</span></button>
+        <div class="submenu"><a href="#patterns">呈现模式</a><a href="#matrix">边界矩阵</a></div>
+      </div>
+      <div class="menu-group open"><a class="menu-link" href="#validation"><span class="menu-index">04</span>验证与风险</a></div>
+    </nav>
+    <div class="sidebar-foot">Starter Template · v1.0</div>
+  </aside>
+  <div class="overlay" id="overlay"></div>
+  <main class="main">
+    <div class="mobile-bar"><div class="mobile-brand"><span class="brand-dot"></span>视觉报告示例</div><button class="mobile-menu-btn" id="openMenu" type="button">目录</button></div>
+    <div class="content">
+      <section class="hero" id="overview">
+        <div class="eyebrow">VISUAL REPORT SYSTEM</div>
+        <h1>把复杂内容整理成<br><em>可扫描、可导航、可验证</em>的视觉报告</h1>
+        <p class="hero-copy">这个模板只展示视觉骨架：左侧一级/二级菜单、编辑型报告标题、低饱和卡片、对照模块、Tab 与表格。替换内容时保持信息层级，不要机械保留示例文本。</p>
+        <div class="stats"><div class="stat"><strong>264px</strong><span>默认桌面侧栏</span></div><div class="stat"><strong>1200</strong><span>主内容最大宽度</span></div><div class="stat"><strong>14px</strong><span>常用卡片圆角</span></div><div class="stat"><strong>900px</strong><span>移动端切换参考</span></div></div>
+      </section>
+
+      <section class="section" id="principles">
+        <div class="section-head"><div><div class="section-label">Design Principles</div><h2 class="section-title">设计原则</h2></div><p class="section-desc">重点来自结构和排版，而不是大量装饰。每个模块应该对应一种清晰的信息任务。</p></div>
+        <div class="grid-3">
+          <article class="card"><div class="icon">01</div><h3 class="card-title">纸张感，而非后台感</h3><p>温暖米白底、细边框、低饱和阴影，让长报告保持专业但不冰冷。</p></article>
+          <article class="card"><div class="icon">02</div><h3 class="card-title">层级先于组件</h3><p>先明确章节、结论、证据和风险，再选择卡片、表格或流程。</p></article>
+          <article class="card"><div class="icon">03</div><h3 class="card-title">强调色只做强调</h3><p>琥珀金用于 Eyebrow、标签和关键对比，不做整屏大面积背景。</p></article>
+        </div>
+      </section>
+
+      <section class="section" id="comparison">
+        <div class="section-head"><div><div class="section-label">Comparison</div><h2 class="section-title">双方案对照</h2></div><p class="section-desc">适合角色、方案、Before/After 等二元关系。</p></div>
+        <div class="dual"><div class="dual-pane a"><div class="dual-kicker">PRIMARY</div><h3>结构主线</h3><p>使用深海军蓝表达专业、规则、框架和核心结论。</p><div class="tags"><span class="tag">标题</span><span class="tag">Active</span><span class="tag">表头</span></div></div><div class="dual-divider"></div><div class="dual-pane b"><div class="dual-kicker">ACCENT</div><h3>强调支线</h3><p>使用琥珀金表达重点、第二语义、风险或轻量提醒。</p><div class="tags"><span class="tag">Eyebrow</span><span class="tag">Badge</span><span class="tag">Callout</span></div></div></div>
+      </section>
+
+      <section class="section band" id="patterns">
+        <div class="section-head"><div><div class="section-label">Presentation Patterns</div><h2 class="section-title">呈现模式</h2></div><p class="section-desc">Tab 用于同层互斥信息；卡片用于模块化洞察；表格用于规则、边界和矩阵。</p></div>
+        <div class="tabs"><button class="tab active" data-tab="a">核心结论</button><button class="tab" data-tab="b">设计约束</button><button class="tab" data-tab="c">交互原则</button></div>
+        <div class="tab-panel" id="tabPanel"><p><strong style="color:var(--ink-navy)">核心结论：</strong>视觉风格应稳定地服务于阅读结构，避免让卡片、图标和颜色抢走业务信息本身的注意力。</p><div class="callout">关键判断：如果删除阴影和动效后页面就“失去设计”，说明结构层级还不够强。</div></div>
+      </section>
+
+      <section class="section" id="matrix">
+        <div class="section-head"><div><div class="section-label">Boundary Matrix</div><h2 class="section-title">边界矩阵</h2></div><p class="section-desc">表格是这套视觉系统的重要组成，不要为了“现代感”把结构化数据拆成几十张卡。</p></div>
+        <div class="table-wrap"><table><thead><tr><th>模块</th><th>推荐呈现</th><th>语义色</th><th>注意事项</th></tr></thead><tbody><tr><td><strong style="color:var(--ink-navy)">关键指标</strong></td><td>Stats / Metric Strip</td><td><span class="badge">Navy</span></td><td>2–4 个为佳，避免十几个 KPI 平铺。</td></tr><tr><td><strong style="color:var(--ink-navy)">角色/方案对照</strong></td><td>Dual Card</td><td><span class="badge">Navy</span> <span class="badge amber">Amber</span></td><td>两侧对称但不能高饱和。</td></tr><tr><td><strong style="color:var(--ink-navy)">风险与边界</strong></td><td>Table / Warning Card</td><td><span class="badge amber">Amber</span></td><td>中等风险用琥珀，不默认整行红色。</td></tr></tbody></table></div>
+      </section>
+
+      <section class="section" id="validation">
+        <div class="section-head"><div><div class="section-label">Validation</div><h2 class="section-title">验证与风险</h2></div><p class="section-desc">验收必须覆盖响应式、导航、对比度、溢出和数据真实性。</p></div>
+        <div class="grid-3"><article class="card"><div class="icon">✓</div><h3 class="card-title">可导航</h3><p>点击目录可以定位；滚动内容可以更新 active。</p></article><article class="card"><div class="icon">↔</div><h3 class="card-title">可响应</h3><p>900px 以下改抽屉；表格自身横向滚动。</p></article><article class="card"><div class="icon">!</div><h3 class="card-title">不虚构</h3><p>模板只规定展示方式，业务事实和数字必须来自用户输入。</p></article></div>
+        <div class="callout amber">风险提示：不要把“参考风格”理解为逐像素复制。应保留视觉语法，重构信息架构并适配新内容。</div>
+      </section>
+
+      <footer class="footer">Paper / Navy / Amber Visual Report · Starter Template</footer>
+    </div>
+  </main>
+</div>
+<script>
+const sidebar=document.getElementById('sidebar');const overlay=document.getElementById('overlay');
+function closeMenu(){sidebar.classList.remove('open');overlay.classList.remove('show');document.body.style.overflow=''}
+document.getElementById('openMenu').addEventListener('click',()=>{sidebar.classList.add('open');overlay.classList.add('show');document.body.style.overflow='hidden'});overlay.addEventListener('click',closeMenu);document.addEventListener('keydown',e=>{if(e.key==='Escape')closeMenu()});
+document.querySelectorAll('.menu-toggle').forEach(btn=>btn.addEventListener('click',()=>btn.closest('.menu-group').classList.toggle('open')));
+const anchors=[...document.querySelectorAll('.menu a[href^="#"]')];const sections=anchors.map(a=>document.querySelector(a.getAttribute('href'))).filter(Boolean);
+anchors.forEach(a=>a.addEventListener('click',()=>{if(innerWidth<=900)closeMenu()}));
+const observer=new IntersectionObserver(entries=>{const visible=entries.filter(e=>e.isIntersecting).sort((a,b)=>b.intersectionRatio-a.intersectionRatio)[0];if(!visible)return;anchors.forEach(a=>a.classList.toggle('active',a.getAttribute('href')==='#'+visible.target.id));const parent=[...anchors].find(a=>a.getAttribute('href')==='#'+visible.target.id)?.closest('.menu-group');if(parent)parent.classList.add('open')},{rootMargin:'-18% 0px -68% 0px',threshold:[0,.15,.4]});sections.forEach(s=>observer.observe(s));
+const copy={a:'<p><strong style="color:var(--ink-navy)">核心结论：</strong>视觉风格应稳定地服务于阅读结构，避免让卡片、图标和颜色抢走业务信息本身的注意力。</p><div class="callout">关键判断：如果删除阴影和动效后页面就“失去设计”，说明结构层级还不够强。</div>',b:'<p><strong style="color:var(--ink-navy)">设计约束：</strong>主色负责结构，强调色负责点亮；卡片、表格、Tab 必须共享相同边框、圆角和文字层级。</p><div class="callout amber">不要为了视觉丰富引入超过必要数量的颜色和组件变体。</div>',c:'<p><strong style="color:var(--ink-navy)">交互原则：</strong>hover 只做 2–3px 位移，Tab 使用清晰 active，二级菜单只在确有子层级时出现。</p><div class="callout">所有动效在 reduced motion 模式下可关闭。</div>'};document.querySelectorAll('.tab').forEach(btn=>btn.addEventListener('click',()=>{document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));btn.classList.add('active');document.getElementById('tabPanel').innerHTML=copy[btn.dataset.tab]}));
+</script>
+</body>
+</html>

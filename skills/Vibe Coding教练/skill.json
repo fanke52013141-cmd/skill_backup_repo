@@ -1,0 +1,10 @@
+{
+  "name": "Vibe Coding教练",
+  "slug": "vibe-coding-coach",
+  "version": "1.0.0",
+  "entry": "SKILL.md",
+  "summary": "把模糊产品想法结构化为可实现系统，含需求梳理、状态设计与 MVP 任务拆解",
+  "origin": "self",
+  "source": "桌面 skills库/vibe coding教练.md",
+  "updated": "2026-10-23"
+}

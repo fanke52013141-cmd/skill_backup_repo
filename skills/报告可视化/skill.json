@@ -1,0 +1,11 @@
+{
+  "name": "报告可视化",
+  "slug": "paper-navy-visual-report",
+  "version": "1.0.0",
+  "entry": "SKILL.md",
+  "summary": "生成左侧菜单 + 米白纸张 + 深海军蓝的编辑型研究报告页面",
+  "origin": "adapted",
+  "source": "桌面 skills库/报告可视化-skill.zip（原作 paper-navy-visual-report）",
+  "updated": "2026-10-23",
+  "audit": "2026-09-01 审计通过：无 P0/P1 风险；P2 提示——只做本地静态校验，无数据外发"
+}

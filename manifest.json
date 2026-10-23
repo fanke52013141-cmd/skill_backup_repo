@@ -1,0 +1,77 @@
+{
+  "schema": 1,
+  "updated": "2026-10-23",
+  "skills": [
+    {
+      "name": "PRD工程师",
+      "slug": "prd-engineer",
+      "version": "1.0.0",
+      "entry": "SKILL.md",
+      "summary": "把原型和交互说明转成前端可直接编码的 PRD，消灭一切模糊性",
+      "origin": "self",
+      "source": "桌面 skills库/prd-engineer.md",
+      "updated": "2026-10-23"
+    },
+    {
+      "name": "Vibe Coding教练",
+      "slug": "vibe-coding-coach",
+      "version": "1.0.0",
+      "entry": "SKILL.md",
+      "summary": "把模糊产品想法结构化为可实现系统，含需求梳理、状态设计与 MVP 任务拆解",
+      "origin": "self",
+      "source": "桌面 skills库/vibe coding教练.md",
+      "updated": "2026-10-23"
+    },
+    {
+      "name": "公考遴选需求探索",
+      "slug": "gongkao-linxuan-demand-discovery",
+      "version": "1.0.0",
+      "entry": "SKILL.md",
+      "summary": "把公考/遴选考试教育产品的初步想法转化为结构化需求洞察",
+      "origin": "self",
+      "source": "桌面 skills库/公考遴选需求探索专家.md",
+      "updated": "2026-10-23"
+    },
+    {
+      "name": "报告可视化",
+      "slug": "paper-navy-visual-report",
+      "version": "1.0.0",
+      "entry": "SKILL.md",
+      "summary": "生成左侧菜单 + 米白纸张 + 深海军蓝的编辑型研究报告页面",
+      "origin": "adapted",
+      "source": "桌面 skills库/报告可视化-skill.zip（原作 paper-navy-visual-report）",
+      "updated": "2026-10-23",
+      "audit": "2026-09-01 审计通过：无 P0/P1 风险；P2 提示——只做本地静态校验，无数据外发"
+    },
+    {
+      "name": "提示词工程师",
+      "slug": "prompt-engineer",
+      "version": "1.0.0",
+      "entry": "SKILL.md",
+      "summary": "诊断、优化或从零构建提示词，输出可直接复制使用的版本",
+      "origin": "self",
+      "source": "桌面 skills库/提示词撰写skill.md",
+      "updated": "2026-10-23"
+    },
+    {
+      "name": "需求文档审查",
+      "slug": "prd-review-officer",
+      "version": "1.0.0",
+      "entry": "SKILL.md",
+      "summary": "对 PRD 做完整性、一致性、体验、可行性四轮审查，输出问题清单或评审报告",
+      "origin": "self",
+      "source": "桌面 skills库/需求文档审查.md",
+      "updated": "2026-10-23"
+    },
+    {
+      "name": "项目结构可视化",
+      "slug": "project_visualizer",
+      "version": "1.0.0",
+      "entry": "SKILL.md",
+      "summary": "把 GitHub 仓库或本地项目转成面向产品经理的本地可点击可视化导航报告",
+      "origin": "self",
+      "source": "桌面 skills库/github项目可视化.md",
+      "updated": "2026-10-23"
+    }
+  ]
+}
