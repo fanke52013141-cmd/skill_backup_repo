@@ -1,0 +1,30 @@
+{
+  "policy": "用户明确要求中文命名，通用英文字母规则不适用；完整检查另由validate_video_skills完成",
+  "results": [
+    {
+      "name": "视频视觉开发总监",
+      "exit_code": 1,
+      "message": "Name '视频视觉开发总监' should be hyphen-case (lowercase letters, digits, and hyphens only)"
+    },
+    {
+      "name": "视频镜头提示词",
+      "exit_code": 1,
+      "message": "Name '视频镜头提示词' should be hyphen-case (lowercase letters, digits, and hyphens only)"
+    },
+    {
+      "name": "场景视觉设计",
+      "exit_code": 1,
+      "message": "Name '场景视觉设计' should be hyphen-case (lowercase letters, digits, and hyphens only)"
+    },
+    {
+      "name": "角色视觉设计",
+      "exit_code": 1,
+      "message": "Name '角色视觉设计' should be hyphen-case (lowercase letters, digits, and hyphens only)"
+    },
+    {
+      "name": "分镜板提示词",
+      "exit_code": 1,
+      "message": "Name '分镜板提示词' should be hyphen-case (lowercase letters, digits, and hyphens only)"
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "name": "视频视觉开发总监",
+  "slug": "video-visual-development",
+  "version": "1.0.0",
+  "entry": "SKILL.md",
+  "summary": "把故事转为视觉方向报告，比较风格并锁定色彩、灯光、材质与下游美术边界。",
+  "origin": "self-with-research",
+  "source": "用户提供提示词与经核实公开专家资料",
+  "updated": "2026-10-24",
+  "category": "视频制作/视觉开发",
+  "status": "draft",
+  "validation": "结构校验与作者桌面案例；独立前向与实际生成待测试"
+}

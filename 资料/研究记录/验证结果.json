@@ -1,0 +1,60 @@
+{
+  "scope": "结构、引用、字数、元数据和Schema；不代表完整行为质量门禁",
+  "passed": true,
+  "full_quality_gate_passed": false,
+  "release_status": "draft",
+  "count_policy": "Markdown完整知识包；汉字每字计1，英文单词与数字串各计1；URL不计。排除JSON、YAML、原文存档、仓库说明和验证报告。",
+  "skills": [
+    {
+      "name": "视频视觉开发总监",
+      "han": 10359,
+      "editorial": 10571,
+      "non_whitespace": 13486,
+      "markdown_files": 5,
+      "status": "draft"
+    },
+    {
+      "name": "视频镜头提示词",
+      "han": 12270,
+      "editorial": 12440,
+      "non_whitespace": 14983,
+      "markdown_files": 5,
+      "status": "draft"
+    },
+    {
+      "name": "场景视觉设计",
+      "han": 10228,
+      "editorial": 10491,
+      "non_whitespace": 12909,
+      "markdown_files": 5,
+      "status": "draft"
+    },
+    {
+      "name": "角色视觉设计",
+      "han": 10076,
+      "editorial": 10239,
+      "non_whitespace": 12272,
+      "markdown_files": 5,
+      "status": "draft"
+    },
+    {
+      "name": "分镜板提示词",
+      "han": 10051,
+      "editorial": 10204,
+      "non_whitespace": 12407,
+      "markdown_files": 5,
+      "status": "draft"
+    }
+  ],
+  "schema_cases": {
+    "valid": 1,
+    "invalid": 4
+  },
+  "problems": [],
+  "behavior": {
+    "author_tabletop": "recorded",
+    "independent_forward": "pending",
+    "image_video_generation": "pending"
+  },
+  "compatibility": "中文名称按用户与仓库约定校验；通用quick_validate的英文字母命名限制不作为本次硬门禁。"
+}

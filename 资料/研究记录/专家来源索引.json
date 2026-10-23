@@ -1,0 +1,107 @@
+{
+  "布鲁斯": {
+    "author": "Bruce Block",
+    "title": "The Visual Story，出版社介绍与目录",
+    "url": "https://www.routledge.com/The-Visual-Story-Creating-the-Visual-Structure-of-Film-TV-and-Digital-Media/Block/p/book/9781138014152",
+    "access_scope": "已核对搜索引擎返回的出版社介绍与目录；直接打开返回403，未读取全书或第九章全文。",
+    "supported_claim": "公开介绍列出空间、线条、形状、明暗、颜色、运动、节奏，并说明视觉结构与故事结构相关。"
+  },
+  "罗马诺": {
+    "author": "Lou Romano / MoMA",
+    "title": "Colorscript. The Incredibles, 2004",
+    "url": "https://www.moma.org/audio/playlist/192/2575",
+    "access_scope": "已读取展览音频文字稿，含设计师本人说明；未观看完整制作档案。",
+    "supported_claim": "色彩脚本用简化的颜色与形状组织段落情绪，并在制作时帮助参照前后场景。"
+  },
+  "迪士尼视觉": {
+    "author": "Walt Disney Animation Studios",
+    "title": "Visual Development",
+    "url": "https://www.disneyanimation.com/process/visual-development/",
+    "access_scope": "已读取工作室公开流程页；未把图像未见细节当作证据。",
+    "supported_claim": "视觉开发以剧本与导演愿景为依据，用角色、世界、颜色、设计与构图强化主题。"
+  },
+  "胡克斯": {
+    "author": "Ed Hooks",
+    "title": "Acting for Animators Masterclass，公开课程说明",
+    "url": "https://edhooks.com/wp-content/uploads/2023/05/AFA_Masterclass-Studios-game-companies-v4.pdf",
+    "access_scope": "已读取四页公开PDF；只核对大纲，不声称上过课程。",
+    "supported_claim": "公开大纲提出角色以动作追求可证明的目标，并克服障碍。"
+  },
+  "朗威": {
+    "author": "Runway",
+    "title": "Gen-4 Video Prompting Guide",
+    "url": "https://help.runwayml.com/hc/en-us/articles/39789879462419-Gen-4-Video-Prompting-Guide",
+    "access_scope": "已读取官方指南文字；适用其标示模型，不推断所有平台。",
+    "supported_claim": "指南建议从简单动作开始、逐项迭代；图生视频重点描述运动，并使用正向表述。"
+  },
+  "谷歌": {
+    "author": "Google DeepMind",
+    "title": "How to create effective prompts with Veo 3",
+    "url": "https://deepmind.google/models/veo/prompt-guide/",
+    "access_scope": "已读取官方提示指南；不据此保证其他模型支持声音或指定时长。",
+    "supported_claim": "指南分别讨论构图运动、风格、照明、人物、地点、动作和对白等提示维度。"
+  },
+  "环境叙事": {
+    "author": "Harvey Smith / Matthias Worch",
+    "title": "What Happened Here? Environmental Storytelling，GDC 2010",
+    "url": "https://media.gdcvault.com/gdc10/slides/Smith_Harvey_WhatHappenedHereWeb_Notes.pdf",
+    "access_scope": "已读取官方84页讲义的可解析文本；重点核对第12、15、33、41—52页；未声称观看讲座视频。",
+    "supported_claim": "讲义讨论用环境线索关联事件、允许解释，并让局部事件与世界前提呼应。"
+  },
+  "罗伯逊绘制": {
+    "author": "Scott Robertson / Thomas Bertling",
+    "title": "How To Draw，出版社介绍",
+    "url": "https://designstudiopress.com/products/how-to-draw",
+    "access_scope": "已读取出版社产品简介；未读取全书或完整教程。",
+    "supported_claim": "公开介绍以透视网格与基础形体为复杂物件和环境的构造基础。"
+  },
+  "罗伯逊渲染": {
+    "author": "Scott Robertson / Thomas Bertling",
+    "title": "How To Render，出版社介绍",
+    "url": "https://designstudiopress.com/products/how-to-render",
+    "access_scope": "已读取出版社产品简介；未读取全书或声称复刻章节步骤。",
+    "supported_claim": "简介把光、影和反射作为材料表现的基础，区分照明与反射问题。"
+  },
+  "银": {
+    "author": "Stephen Silver",
+    "title": "Silver Drawing Academy，公开课程介绍",
+    "url": "https://www.silverdrawingacademy.com/SDAhomepage",
+    "access_scope": "已读取公开教学目录与介绍；付费视频未观看。",
+    "supported_claim": "公开课程涵盖形状、姿态、观察与夸张，以及转面、表情页等角色生产材料。"
+  },
+  "银书": {
+    "author": "Stephen Silver / Design Studio Press",
+    "title": "The Silver Way，出版社介绍",
+    "url": "https://designstudiopress.com/products/the-silver-way",
+    "access_scope": "已读取出版社简介，只支持作者与适用范围，未读取全书。",
+    "supported_claim": "出版社将该书定位为跨项目、跨风格的角色设计教程；不据此归因具体五步法。"
+  },
+  "马特乌": {
+    "author": "Marcos Mateu-Mestre",
+    "title": "Framed Ink，出版社介绍",
+    "url": "https://designstudiopress.com/products/framed-ink",
+    "access_scope": "已读取出版社简介；只采用其公开描述的教学范围，未读取全书。",
+    "supported_claim": "简介涵盖单幅构图、镜头间连续性、姿态表情与环境的视觉叙事。"
+  },
+  "马特乌环境": {
+    "author": "Marcos Mateu-Mestre",
+    "title": "Framed Environment Design，出版社介绍",
+    "url": "https://designstudiopress.com/products/framed-environment-design",
+    "access_scope": "已读取出版社简介，未读取全书或插图细节。",
+    "supported_claim": "简介强调环境应承担叙事作用，并与角色的行动共同形成故事。"
+  },
+  "戴维森": {
+    "author": "Gregg Davidson",
+    "title": "Cinematics Storyboard Workshop，出版社介绍",
+    "url": "https://designstudiopress.com/products/cinematics-storyboard-workshop",
+    "access_scope": "已读取出版社公开简介；未读取全书，不声称获得全部课程技巧。",
+    "supported_claim": "简介列出分镜机制、机位、镜头推进、场面调度与预演等基础领域。"
+  },
+  "迪士尼故事": {
+    "author": "Walt Disney Animation Studios",
+    "title": "Story",
+    "url": "https://www.disneyanimation.com/process/story/",
+    "access_scope": "已读取工作室公开流程页；未把所有案例当成普遍规则。",
+    "supported_claim": "流程页说明故事艺术家考虑表情、时机、调度与取景，并从缩略草图逐步澄清画面。"
+  }
+}

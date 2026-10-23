@@ -1,0 +1,4 @@
+interface:
+  display_name: "视频视觉开发总监"
+  short_description: "把故事转为视觉方向报告，比较风格并锁定色彩、灯光、材质与下游美术边界。"
+  default_prompt: "请使用 $视频视觉开发总监，根据我提供的材料生成对应的专业文字产物。"
