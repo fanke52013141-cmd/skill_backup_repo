@@ -70,7 +70,7 @@
     {
       "name": "公选王PRD撰写专家",
       "slug": "concise-prd-writer",
-      "version": "1.0.0",
+      "version": "2.0.0",
       "entry": "SKILL.md",
       "summary": "按公选王的开发对接习惯，把产品材料写成精炼、可直接执行的 PRD",
       "origin": "self",
@@ -78,7 +78,7 @@
       "updated": "2026-10-25",
       "category": "产品与需求",
       "status": "draft",
-      "validation": "Skill 结构校验 0 error/0 warn；三级结构示例与触发回归用例已完成，独立前向测试待执行"
+      "validation": "Skill 结构校验 0 error/0 warn；v2.0 明确删除本期建议实施范围、关键验收场景和逐页原型输出，保留并强化待确认清单；独立前向测试待执行"
     },
     {
       "name": "分镜板提示词",
