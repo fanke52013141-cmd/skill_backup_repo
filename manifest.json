@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "updated": "2026-10-24",
+  "updated": "2026-10-25",
   "skills": [
     {
       "name": "PRD工程师",
@@ -57,6 +57,19 @@
       "category": "视频制作/资产设计",
       "status": "draft",
       "validation": "结构校验与作者桌面案例；独立前向与实际生成待测试"
+    },
+    {
+      "name": "广告创意总监",
+      "slug": "ad-creative-director",
+      "version": "1.0.0",
+      "entry": "SKILL.md",
+      "summary": "诊断广告目标与创意机制，路由并编排广告专家，交付文案、脚本或 campaign 方案",
+      "origin": "self",
+      "source": "广告专家套件中的自建广告创意总监模块（经工作流审查与优化）",
+      "updated": "2026-10-25",
+      "category": "广告创意",
+      "status": "draft",
+      "validation": "36 条路由评估用例；作者桌面自测覆盖 12 个用例 ID；独立盲测与目标宿主专家发现待验证"
     },
     {
       "name": "报告可视化",
