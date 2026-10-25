@@ -33,6 +33,19 @@
       "updated": "2026-10-23"
     },
     {
+      "name": "公选王PRD撰写专家",
+      "slug": "concise-prd-writer",
+      "version": "1.0.0",
+      "entry": "SKILL.md",
+      "summary": "按公选王的开发对接习惯，把产品材料写成精炼、可直接执行的 PRD",
+      "origin": "self",
+      "source": "基于用户提供的 AI 考试需求文档与既有 PRD 写作规范构建；未收录原始文档",
+      "updated": "2026-10-25",
+      "category": "产品与需求",
+      "status": "draft",
+      "validation": "Skill 结构校验 0 error/0 warn；三级结构示例与触发回归用例已完成，独立前向测试待执行"
+    },
+    {
       "name": "分镜板提示词",
       "slug": "storyboard-panel-prompts",
       "version": "1.0.0",
