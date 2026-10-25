@@ -2,6 +2,7 @@
 
 按时间倒序，最新在最上面。
 
+- **2026-10-25** `handoff` 新增 → 1.0.0（patch）：从 mattpocock/skills 同步会话压缩与 Agent 交接技能
 - **2026-10-25** `grill-with-docs` 新增 → 1.0.0（patch）：从 mattpocock/skills 同步追问并沉淀术语表与 ADR 技能；依赖 grilling、domain-modeling
 - **2026-10-25** `公选王PRD撰写专家` 新增 → 1.0.0（patch）：新增公司专用精炼 PRD 撰写技能，包含三级结构示例、写作规范、模板与触发用例
 - **2026-10-25** `广告创意总监` 新增 → 1.0.0（新增draft）：新增可独立安装的创意路由总监技能包

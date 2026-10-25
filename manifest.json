@@ -42,6 +42,22 @@
       "validation": "上游原文导入，未做本地行为修改；依赖未随包同步"
     },
     {
+      "name": "handoff",
+      "slug": "handoff",
+      "version": "1.0.0",
+      "entry": "SKILL.md",
+      "summary": "把当前对话压缩成交接文档，供下一个 Agent 接手继续工作",
+      "origin": "upstream",
+      "source": "https://github.com/mattpocock/skills/tree/main/skills/productivity/handoff",
+      "upstream_commit": "5beb35b040e3de97e54fa9e386d7e42d15c295c2",
+      "license": "MIT",
+      "updated": "2026-10-25",
+      "category": "工程协作",
+      "status": "draft",
+      "dependencies": [],
+      "validation": "上游原文导入，未做本地行为修改"
+    },
+    {
       "name": "公考遴选需求探索",
       "slug": "gongkao-linxuan-demand-discovery",
       "version": "1.0.0",
