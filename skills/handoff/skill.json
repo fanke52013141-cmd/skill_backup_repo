@@ -1,7 +1,7 @@
 {
   "name": "handoff",
   "slug": "handoff",
-  "version": "1.0.0",
+  "version": 1,
   "entry": "SKILL.md",
   "summary": "把当前对话压缩成交接文档，供下一个 Agent 接手继续工作",
   "origin": "upstream",
@@ -12,5 +12,8 @@
   "category": "工程协作",
   "status": "draft",
   "dependencies": [],
-  "validation": "上游原文导入，未做本地行为修改"
+  "validation": "上游原文导入，未做本地行为修改",
+  "id": "handoff",
+  "legacy_version": "1.0.0",
+  "updated_at": "2026-10-25T22:28:00+08:00"
 }

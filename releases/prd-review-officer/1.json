@@ -1,0 +1,12 @@
+{
+  "legacy_version": "1.0.0",
+  "source_commit": "55aeedc12fea5b62dedd5dd85ebf44b8a0b087d7",
+  "schema": 2,
+  "id": "prd-review-officer",
+  "name": "需求文档审查",
+  "version": 1,
+  "updated_at": "2026-10-23T10:34:24+08:00",
+  "note": "旧版 1.0.0 映射；初始化技能库：7 个技能入库，统一中文命名与版本号 v1.0.0",
+  "release_ref": "skill/prd-review-officer/v1",
+  "content_sha256": "6ca8d4ce890e4cd82a9c469c04b8f615803c6e16280a3d0d490b1186381f253b"
+}

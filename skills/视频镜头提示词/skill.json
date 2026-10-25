@@ -1,7 +1,7 @@
 {
   "name": "视频镜头提示词",
   "slug": "video-shot-prompts",
-  "version": "1.0.0",
+  "version": 1,
   "entry": "SKILL.md",
   "summary": "把文字、图片与音频参考转为可复制的中文视频镜头指令，处理动作、运镜与声音。",
   "origin": "self-with-research",
@@ -9,5 +9,8 @@
   "updated": "2026-10-24",
   "category": "视频制作/镜头执行",
   "status": "draft",
-  "validation": "结构校验与作者桌面案例；独立前向与实际生成待测试"
+  "validation": "结构校验与作者桌面案例；独立前向与实际生成待测试",
+  "id": "video-shot-prompts",
+  "legacy_version": "1.0.0",
+  "updated_at": "2026-10-24T01:04:40+08:00"
 }

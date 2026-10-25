@@ -1,0 +1,12 @@
+{
+  "legacy_version": "1.0.0",
+  "source_commit": "59abbc3253f6c787d2ebf86e352ff70a30f9f3f0",
+  "schema": 2,
+  "id": "video-visual-development",
+  "name": "视频视觉开发总监",
+  "version": 1,
+  "updated_at": "2026-10-24T01:04:40+08:00",
+  "note": "旧版 1.0.0 映射；新增五个中文视频制作技能并融合公开专家方法",
+  "release_ref": "skill/video-visual-development/v1",
+  "content_sha256": "a88d3aa3ba8711512f3796dcc711444fa6c77d44ac12a1d775dd569ac05f1c44"
+}

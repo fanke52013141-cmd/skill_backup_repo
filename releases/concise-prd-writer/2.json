@@ -1,0 +1,12 @@
+{
+  "legacy_version": "2.0.0",
+  "source_commit": "d1ab235e416a0d91e4fa012e03824335f6b09853",
+  "schema": 2,
+  "id": "concise-prd-writer",
+  "name": "公选王PRD撰写专家",
+  "version": 2,
+  "updated_at": "2026-10-25T23:58:28+08:00",
+  "note": "旧版 2.0.0 映射；发布 公选王PRD撰写专家 v2.0.0：删除本期建议实施范围、关键验收场景与逐页原型输出；新增输出契约；保留并强化待确认清单",
+  "release_ref": "skill/concise-prd-writer/v2",
+  "content_sha256": "7ace1b56d50a9bea85b12ae23ab6446b431d5a6a155f624f7aa53a8c07dbfe5a"
+}

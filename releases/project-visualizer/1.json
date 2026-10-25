@@ -1,0 +1,12 @@
+{
+  "legacy_version": "1.0.0",
+  "source_commit": "55aeedc12fea5b62dedd5dd85ebf44b8a0b087d7",
+  "schema": 2,
+  "id": "project-visualizer",
+  "name": "项目结构可视化",
+  "version": 1,
+  "updated_at": "2026-10-23T10:34:24+08:00",
+  "note": "旧版 1.0.0 映射；初始化技能库：7 个技能入库，统一中文命名与版本号 v1.0.0",
+  "release_ref": "skill/project-visualizer/v1",
+  "content_sha256": "948a3ead024ff52b33cd3d2b8449f674e7e642368a2e25b66f76013ef5999d8a"
+}

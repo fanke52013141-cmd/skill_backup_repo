@@ -1,0 +1,12 @@
+{
+  "legacy_version": "1.0.0",
+  "source_commit": "88cb1b2afe8435a8ce5613599be7318f9ed9bd4f",
+  "schema": 2,
+  "id": "grill-with-docs",
+  "name": "grill-with-docs",
+  "version": 1,
+  "updated_at": "2026-10-25T22:27:59+08:00",
+  "note": "旧版 1.0.0 映射；发布 grill-with-docs v1.0.0：从 mattpocock/skills 同步追问并沉淀术语表与 ADR 技能；依赖 grilling、domain-modeling",
+  "release_ref": "skill/grill-with-docs/v1",
+  "content_sha256": "125bad2794dccd33d56193332018e83d9abc4411355adeb7ec4714ce4bfb6ce5"
+}

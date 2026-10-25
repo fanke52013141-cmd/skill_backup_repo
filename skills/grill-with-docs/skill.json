@@ -1,7 +1,7 @@
 {
   "name": "grill-with-docs",
   "slug": "grill-with-docs",
-  "version": "1.0.0",
+  "version": 1,
   "entry": "SKILL.md",
   "summary": "通过追问澄清计划，并同步沉淀项目术语表和 ADR；依赖 grilling 与 domain-modeling",
   "origin": "upstream",
@@ -15,5 +15,8 @@
     "grilling",
     "domain-modeling"
   ],
-  "validation": "上游原文导入，未做本地行为修改；依赖未随包同步"
+  "validation": "上游原文导入，未做本地行为修改；依赖未随包同步",
+  "id": "grill-with-docs",
+  "legacy_version": "1.0.0",
+  "updated_at": "2026-10-25T22:27:59+08:00"
 }

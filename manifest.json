@@ -1,31 +1,11 @@
 {
-  "schema": 1,
-  "updated": "2026-10-25",
+  "schema": 2,
+  "updated_at": "2026-10-25T16:16:40+00:00",
   "skills": [
-    {
-      "name": "PRD工程师",
-      "slug": "prd-engineer",
-      "version": "1.0.0",
-      "entry": "SKILL.md",
-      "summary": "把原型和交互说明转成前端可直接编码的 PRD，消灭一切模糊性",
-      "origin": "self",
-      "source": "桌面 skills库/prd-engineer.md",
-      "updated": "2026-10-23"
-    },
-    {
-      "name": "Vibe Coding教练",
-      "slug": "vibe-coding-coach",
-      "version": "1.0.0",
-      "entry": "SKILL.md",
-      "summary": "把模糊产品想法结构化为可实现系统，含需求梳理、状态设计与 MVP 任务拆解",
-      "origin": "self",
-      "source": "桌面 skills库/vibe coding教练.md",
-      "updated": "2026-10-23"
-    },
     {
       "name": "grill-with-docs",
       "slug": "grill-with-docs",
-      "version": "1.0.0",
+      "version": 1,
       "entry": "SKILL.md",
       "summary": "通过追问澄清计划，并同步沉淀项目术语表和 ADR；依赖 grilling 与 domain-modeling",
       "origin": "upstream",
@@ -39,12 +19,15 @@
         "grilling",
         "domain-modeling"
       ],
-      "validation": "上游原文导入，未做本地行为修改；依赖未随包同步"
+      "validation": "上游原文导入，未做本地行为修改；依赖未随包同步",
+      "id": "grill-with-docs",
+      "legacy_version": "1.0.0",
+      "updated_at": "2026-10-25T22:27:59+08:00"
     },
     {
       "name": "handoff",
       "slug": "handoff",
-      "version": "1.0.0",
+      "version": 1,
       "entry": "SKILL.md",
       "summary": "把当前对话压缩成交接文档，供下一个 Agent 接手继续工作",
       "origin": "upstream",
@@ -55,22 +38,54 @@
       "category": "工程协作",
       "status": "draft",
       "dependencies": [],
-      "validation": "上游原文导入，未做本地行为修改"
+      "validation": "上游原文导入，未做本地行为修改",
+      "id": "handoff",
+      "legacy_version": "1.0.0",
+      "updated_at": "2026-10-25T22:28:00+08:00"
+    },
+    {
+      "name": "PRD工程师",
+      "slug": "prd-engineer",
+      "version": 1,
+      "entry": "SKILL.md",
+      "summary": "把原型和交互说明转成前端可直接编码的 PRD，消灭一切模糊性",
+      "origin": "self",
+      "source": "桌面 skills库/prd-engineer.md",
+      "updated": "2026-10-23",
+      "id": "prd-engineer",
+      "legacy_version": "1.0.0",
+      "updated_at": "2026-10-23T10:34:24+08:00"
+    },
+    {
+      "name": "Vibe Coding教练",
+      "slug": "vibe-coding-coach",
+      "version": 1,
+      "entry": "SKILL.md",
+      "summary": "把模糊产品想法结构化为可实现系统，含需求梳理、状态设计与 MVP 任务拆解",
+      "origin": "self",
+      "source": "桌面 skills库/vibe coding教练.md",
+      "updated": "2026-10-23",
+      "id": "vibe-coding-coach",
+      "legacy_version": "1.0.0",
+      "updated_at": "2026-10-23T10:34:24+08:00"
     },
     {
       "name": "公考遴选需求探索",
       "slug": "gongkao-linxuan-demand-discovery",
-      "version": "1.0.0",
+      "version": 1,
       "entry": "SKILL.md",
       "summary": "把公考/遴选考试教育产品的初步想法转化为结构化需求洞察",
       "origin": "self",
       "source": "桌面 skills库/公考遴选需求探索专家.md",
-      "updated": "2026-10-23"
+      "updated": "2026-10-23",
+      "id": "gongkao-linxuan-demand-discovery",
+      "legacy_version": "1.0.0",
+      "updated_at": "2026-10-23T10:34:24+08:00"
     },
     {
       "name": "公选王PRD撰写专家",
       "slug": "concise-prd-writer",
-      "version": "2.0.0",
+      "version": 2,
       "entry": "SKILL.md",
       "summary": "按公选王的开发对接习惯，把产品材料写成精炼、可直接执行的 PRD",
       "origin": "self",
@@ -78,12 +93,15 @@
       "updated": "2026-10-25",
       "category": "产品与需求",
       "status": "draft",
-      "validation": "Skill 结构校验 0 error/0 warn；v2.0 明确删除本期建议实施范围、关键验收场景和逐页原型输出，保留并强化待确认清单；独立前向测试待执行"
+      "validation": "Skill 结构校验 0 error/0 warn；v2.0 明确删除本期建议实施范围、关键验收场景和逐页原型输出，保留并强化待确认清单；独立前向测试待执行",
+      "id": "concise-prd-writer",
+      "legacy_version": "2.0.0",
+      "updated_at": "2026-10-25T23:58:28+08:00"
     },
     {
       "name": "分镜板提示词",
       "slug": "storyboard-panel-prompts",
-      "version": "1.0.0",
+      "version": 1,
       "entry": "SKILL.md",
       "summary": "把已有镜头组与视觉规范转为每板最多四格的静态分镜板提示词，保持镜序和连续性。",
       "origin": "self-with-research",
@@ -91,12 +109,15 @@
       "updated": "2026-10-24",
       "category": "视频制作/分镜预演",
       "status": "draft",
-      "validation": "结构校验与作者桌面案例；独立前向与实际生成待测试"
+      "validation": "结构校验与作者桌面案例；独立前向与实际生成待测试",
+      "id": "storyboard-panel-prompts",
+      "legacy_version": "1.0.0",
+      "updated_at": "2026-10-24T01:04:40+08:00"
     },
     {
       "name": "场景视觉设计",
       "slug": "scene-visual-design",
-      "version": "1.0.0",
+      "version": 1,
       "entry": "SKILL.md",
       "summary": "生成同一地点的场景主视图与四宫格提示词，锁定空间结构、光源和环境叙事。",
       "origin": "self-with-research",
@@ -104,12 +125,15 @@
       "updated": "2026-10-24",
       "category": "视频制作/资产设计",
       "status": "draft",
-      "validation": "结构校验与作者桌面案例；独立前向与实际生成待测试"
+      "validation": "结构校验与作者桌面案例；独立前向与实际生成待测试",
+      "id": "scene-visual-design",
+      "legacy_version": "1.0.0",
+      "updated_at": "2026-10-24T01:04:40+08:00"
     },
     {
       "name": "广告创意总监",
       "slug": "ad-creative-director",
-      "version": "1.0.0",
+      "version": 1,
       "entry": "SKILL.md",
       "summary": "诊断广告目标与创意机制，路由并编排广告专家，交付文案、脚本或 campaign 方案",
       "origin": "self",
@@ -117,33 +141,42 @@
       "updated": "2026-10-25",
       "category": "广告创意",
       "status": "draft",
-      "validation": "36 条路由评估用例；作者桌面自测覆盖 12 个用例 ID；独立盲测与目标宿主专家发现待验证"
+      "validation": "36 条路由评估用例；作者桌面自测覆盖 12 个用例 ID；独立盲测与目标宿主专家发现待验证",
+      "id": "ad-creative-director",
+      "legacy_version": "1.0.0",
+      "updated_at": "2026-10-25T11:12:38+08:00"
     },
     {
       "name": "报告可视化",
       "slug": "paper-navy-visual-report",
-      "version": "1.0.0",
+      "version": 1,
       "entry": "SKILL.md",
       "summary": "生成左侧菜单 + 米白纸张 + 深海军蓝的编辑型研究报告页面",
       "origin": "adapted",
       "source": "桌面 skills库/报告可视化-skill.zip（原作 paper-navy-visual-report）",
       "updated": "2026-10-23",
-      "audit": "2026-09-01 审计通过：无 P0/P1 风险；P2 提示——只做本地静态校验，无数据外发"
+      "audit": "2026-09-01 审计通过：无 P0/P1 风险；P2 提示——只做本地静态校验，无数据外发",
+      "id": "paper-navy-visual-report",
+      "legacy_version": "1.0.0",
+      "updated_at": "2026-10-23T10:34:24+08:00"
     },
     {
       "name": "提示词工程师",
       "slug": "prompt-engineer",
-      "version": "1.0.0",
+      "version": 1,
       "entry": "SKILL.md",
       "summary": "诊断、优化或从零构建提示词，输出可直接复制使用的版本",
       "origin": "self",
       "source": "桌面 skills库/提示词撰写skill.md",
-      "updated": "2026-10-23"
+      "updated": "2026-10-23",
+      "id": "prompt-engineer",
+      "legacy_version": "1.0.0",
+      "updated_at": "2026-10-23T10:34:24+08:00"
     },
     {
       "name": "视频视觉开发总监",
       "slug": "video-visual-development",
-      "version": "1.0.0",
+      "version": 1,
       "entry": "SKILL.md",
       "summary": "把故事转为视觉方向报告，比较风格并锁定色彩、灯光、材质与下游美术边界。",
       "origin": "self-with-research",
@@ -151,12 +184,15 @@
       "updated": "2026-10-24",
       "category": "视频制作/视觉开发",
       "status": "draft",
-      "validation": "结构校验与作者桌面案例；独立前向与实际生成待测试"
+      "validation": "结构校验与作者桌面案例；独立前向与实际生成待测试",
+      "id": "video-visual-development",
+      "legacy_version": "1.0.0",
+      "updated_at": "2026-10-24T01:04:40+08:00"
     },
     {
       "name": "视频镜头提示词",
       "slug": "video-shot-prompts",
-      "version": "1.0.0",
+      "version": 1,
       "entry": "SKILL.md",
       "summary": "把文字、图片与音频参考转为可复制的中文视频镜头指令，处理动作、运镜与声音。",
       "origin": "self-with-research",
@@ -164,12 +200,15 @@
       "updated": "2026-10-24",
       "category": "视频制作/镜头执行",
       "status": "draft",
-      "validation": "结构校验与作者桌面案例；独立前向与实际生成待测试"
+      "validation": "结构校验与作者桌面案例；独立前向与实际生成待测试",
+      "id": "video-shot-prompts",
+      "legacy_version": "1.0.0",
+      "updated_at": "2026-10-24T01:04:40+08:00"
     },
     {
       "name": "角色视觉设计",
       "slug": "character-visual-design",
-      "version": "1.0.0",
+      "version": 1,
       "entry": "SKILL.md",
       "summary": "生成同一角色的转面参考图与全身立绘提示词，建立剪影、服装结构与多角度锚点。",
       "origin": "self-with-research",
@@ -177,27 +216,36 @@
       "updated": "2026-10-24",
       "category": "视频制作/资产设计",
       "status": "draft",
-      "validation": "结构校验与作者桌面案例；独立前向与实际生成待测试"
+      "validation": "结构校验与作者桌面案例；独立前向与实际生成待测试",
+      "id": "character-visual-design",
+      "legacy_version": "1.0.0",
+      "updated_at": "2026-10-24T01:04:40+08:00"
     },
     {
       "name": "需求文档审查",
       "slug": "prd-review-officer",
-      "version": "1.0.0",
+      "version": 1,
       "entry": "SKILL.md",
       "summary": "对 PRD 做完整性、一致性、体验、可行性四轮审查，输出问题清单或评审报告",
       "origin": "self",
       "source": "桌面 skills库/需求文档审查.md",
-      "updated": "2026-10-23"
+      "updated": "2026-10-23",
+      "id": "prd-review-officer",
+      "legacy_version": "1.0.0",
+      "updated_at": "2026-10-23T10:34:24+08:00"
     },
     {
       "name": "项目结构可视化",
       "slug": "project_visualizer",
-      "version": "1.0.0",
+      "version": 1,
       "entry": "SKILL.md",
       "summary": "把 GitHub 仓库或本地项目转成面向产品经理的本地可点击可视化导航报告",
       "origin": "self",
       "source": "桌面 skills库/github项目可视化.md",
-      "updated": "2026-10-23"
+      "updated": "2026-10-23",
+      "id": "project-visualizer",
+      "legacy_version": "1.0.0",
+      "updated_at": "2026-10-23T10:34:24+08:00"
     }
   ]
 }

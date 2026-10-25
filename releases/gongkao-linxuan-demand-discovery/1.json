@@ -1,0 +1,12 @@
+{
+  "legacy_version": "1.0.0",
+  "source_commit": "55aeedc12fea5b62dedd5dd85ebf44b8a0b087d7",
+  "schema": 2,
+  "id": "gongkao-linxuan-demand-discovery",
+  "name": "公考遴选需求探索",
+  "version": 1,
+  "updated_at": "2026-10-23T10:34:24+08:00",
+  "note": "旧版 1.0.0 映射；初始化技能库：7 个技能入库，统一中文命名与版本号 v1.0.0",
+  "release_ref": "skill/gongkao-linxuan-demand-discovery/v1",
+  "content_sha256": "6e2a12b9ee7ef42a52b7caa386da0da40c2da751bfb07c4cc19616702186a49c"
+}

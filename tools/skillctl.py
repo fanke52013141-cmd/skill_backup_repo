@@ -1,535 +1,242 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-"""skillctl — 技能库版本管理与安装工具
-
-仓库是唯一真相源，~/.workbuddy/skills 只是部署产物。
-安装器只搬不改：所有内容规范化都在入库时完成。
-
-用法:
-    python tools/skillctl.py list
-    python tools/skillctl.py status
-    python tools/skillctl.py install 报告可视化 [--force]
-    python tools/skillctl.py update --all [--force]
-    python tools/skillctl.py diff 报告可视化
-    python tools/skillctl.py publish 报告可视化 --bump patch --note "改了验收清单"
-    python tools/skillctl.py verify
-"""
-
+"""Integer-versioned Skill installation and publishing; Python 3.10+, Git, stdlib only."""
 from __future__ import annotations
-
 import argparse
-import hashlib
 import json
-import shutil
-import subprocess
+import os
 import sys
-import unicodedata
-from datetime import datetime
+import hashlib
+from contextlib import ExitStack
 from difflib import unified_diff
 from pathlib import Path
+import skillstore as store
 
-REPO = Path(__file__).resolve().parent.parent
-SKILLS_DIR = REPO / "skills"
-MANIFEST = REPO / "manifest.json"
 
-TARGET = Path.home() / ".workbuddy" / "skills"
-STATE_FILE = TARGET / ".skillctl.json"
-BACKUP_DIR = TARGET.parent / ".skillctl_backup"
+def inventory(args):
+    ref = store.remote_ref(store.REPO, args.offline)
+    data = store.manifest(store.REPO, ref)
+    if data.get("schema") != 2:
+        raise ValueError("远端尚未升级；测试本地迁移请使用 --offline")
+    return ref, data
 
 
-def set_target(raw: str) -> None:
-    global TARGET, STATE_FILE, BACKUP_DIR
-    TARGET = Path(raw).expanduser().resolve()
-    STATE_FILE = TARGET / ".skillctl.json"
-    BACKUP_DIR = TARGET.parent / ".skillctl_backup"
+def cmd_list(args):
+    ref, data = inventory(args)
+    return {"source": "本地 HEAD（离线）" if args.offline else "origin/main", "commit": store.git(store.REPO, "rev-parse", ref), "skills": data["skills"]}
 
-EXCLUDE_DIRS = {"__pycache__", ".git", "node_modules", ".skillctl_backup"}
-EXCLUDE_SUFFIX = {".pyc", ".pyo", ".DS_Store"}
 
+def cmd_history(args):
+    ref, data = inventory(args)
+    values = []
+    for skill in data["skills"] if args.all else [store.find_skill(data, args.name)]:
+        value = {"name": skill["name"], "releases": [store.release(store.REPO, skill, v, ref) for v in range(1, skill["version"] + 1)]}
+        if args.revisions:
+            value["revisions"] = store.git(store.REPO, "log", "--format=%H %cI %s", ref, "--", f"skills/{skill['name']}").splitlines()
+        values.append(value)
+    return values if args.all else values[0]
 
-# ---------- 输出 ----------
 
-def init_stdout() -> None:
-    for stream in (sys.stdout, sys.stderr):
-        try:
-            stream.reconfigure(encoding="utf-8")
-        except Exception:
-            pass
+def cmd_install(args):
+    ref, data = inventory(args)
+    skill = store.find_skill(data, args.name)
+    version = args.version or skill["version"]
+    if version > skill["version"]:
+        raise ValueError("指定版本尚未发布")
+    record = store.install(store.REPO, args.target, skill, store.release(store.REPO, skill, version, ref), pinned=args.version is not None, force=args.force)
+    return {"name": skill["name"], "version": record["version"], "pinned": record["pinned"], "source": "离线 HEAD" if args.offline else "origin/main", "target": str(args.target / skill["name"])}
 
 
-def dwidth(text: str) -> int:
-    return sum(2 if unicodedata.east_asian_width(c) in "WF" else 1 for c in text)
-
-
-def pad(text: str, width: int) -> str:
-    return text + " " * max(0, width - dwidth(text))
-
-
-def say(msg: str = "") -> None:
-    print(msg)
-
-
-def ok(msg: str) -> None:
-    print(f"  [完成] {msg}")
-
-
-def warn(msg: str) -> None:
-    print(f"  [注意] {msg}")
-
-
-def fail(msg: str) -> None:
-    print(f"  [失败] {msg}")
-
-
-# ---------- 仓库读写 ----------
-
-def load_manifest() -> dict:
-    if not MANIFEST.exists():
-        raise SystemExit("找不到 manifest.json，仓库尚未初始化")
-    return json.loads(MANIFEST.read_text(encoding="utf-8"))
-
-
-def save_manifest(data: dict) -> None:
-    data["updated"] = datetime.now().strftime("%Y-%m-%d")
-    data["skills"] = sorted(data["skills"], key=lambda x: x["name"])
-    MANIFEST.write_text(json.dumps(data, ensure_ascii=False, indent=2) + "\n",
-                        encoding="utf-8", newline="\n")
-
-
-def repo_skill(name: str) -> Path:
-    path = SKILLS_DIR / name
-    if not path.is_dir():
-        avail = "、".join(s["name"] for s in load_manifest()["skills"])
-        raise SystemExit(f"仓库里没有技能「{name}」。现有：{avail}")
-    return path
-
-
-def read_skill_meta(path: Path) -> dict:
-    meta_file = path / "skill.json"
-    if not meta_file.exists():
-        raise SystemExit(f"{path.name} 缺少 skill.json，无法读取版本")
-    return json.loads(meta_file.read_text(encoding="utf-8"))
-
-
-def write_skill_meta(path: Path, meta: dict) -> None:
-    (path / "skill.json").write_text(json.dumps(meta, ensure_ascii=False, indent=2) + "\n",
-                                     encoding="utf-8", newline="\n")
-
-
-# ---------- 状态与哈希 ----------
-
-def load_state() -> dict:
-    if not STATE_FILE.exists():
-        return {"schema": 1, "installed": {}}
-    return json.loads(STATE_FILE.read_text(encoding="utf-8"))
-
-
-def save_state(state: dict) -> None:
-    TARGET.mkdir(parents=True, exist_ok=True)
-    STATE_FILE.write_text(json.dumps(state, ensure_ascii=False, indent=2) + "\n",
-                          encoding="utf-8", newline="\n")
-
-
-def iter_files(root: Path):
-    for p in sorted(root.rglob("*")):
-        if p.is_dir():
-            continue
-        rel = p.relative_to(root)
-        if any(part in EXCLUDE_DIRS for part in rel.parts):
-            continue
-        if p.suffix in EXCLUDE_SUFFIX or p.name in EXCLUDE_SUFFIX or ".local." in p.name:
-            continue
-        yield p, rel
-
-
-def file_map(root: Path) -> dict:
-    result = {}
-    for p, rel in iter_files(root):
-        result[rel.as_posix()] = hashlib.sha256(p.read_bytes()).hexdigest()
-    return result
-
-
-def digest(files: dict) -> str:
-    h = hashlib.sha256()
-    for name in sorted(files):
-        h.update(name.encode("utf-8"))
-        h.update(files[name].encode("utf-8"))
-    return h.hexdigest()[:16]
-
-
-def parse_version(v: str) -> tuple:
-    parts = []
-    for chunk in str(v).split("."):
-        try:
-            parts.append(int(chunk))
-        except ValueError:
-            parts.append(0)
-    while len(parts) < 3:
-        parts.append(0)
-    return tuple(parts[:3])
-
-
-def bump_version(version: str, level: str) -> str:
-    major, minor, patch = parse_version(version)
-    if level == "major":
-        return f"{major + 1}.0.0"
-    if level == "minor":
-        return f"{major}.{minor + 1}.0"
-    return f"{major}.{minor}.{patch + 1}"
-
-
-# ---------- 安装动作 ----------
-
-def backup_existing(path: Path) -> Path:
-    BACKUP_DIR.mkdir(parents=True, exist_ok=True)
-    stamp = datetime.now().strftime("%Y%m%d-%H%M%S")
-    dest = BACKUP_DIR / f"{path.name}-{stamp}"
-    shutil.copytree(path, dest)
-    return dest
-
-
-def local_changed(name: str, state: dict) -> tuple:
-    """返回 (是否被本地改动, 说明)。没有安装记录时视为外部安装。"""
-    target = TARGET / name
-    if not target.is_dir():
-        return False, "未安装"
-    record = state["installed"].get(name)
-    if not record:
-        return True, "本地已存在但无安装记录"
-    now = digest(file_map(target))
-    if now != record.get("hash"):
-        return True, "安装后被改动过"
-    return False, ""
-
-
-def copy_into_repo_name(src: Path, dst: Path) -> None:
-    if dst.exists():
-        shutil.rmtree(dst)
-    shutil.copytree(src, dst, ignore=shutil.ignore_patterns(
-        "__pycache__", "*.pyc", ".skillctl*", "*.local.*"))
-
-
-def find_duplicates(name: str, src: Path) -> list:
-    """找出本地其他目录里正文完全相同的技能（改名遗留的旧副本）。"""
-    def body_hash(path: Path):
-        f = path / "SKILL.md"
-        if not f.exists():
-            return None
-        text = f.read_text(encoding="utf-8", errors="replace")
-        parts = text.split("---", 2)
-        body = parts[2] if len(parts) == 3 else text
-        return hashlib.sha256(body.strip().encode("utf-8")).hexdigest()
-
-    want = body_hash(src)
-    if not want or not TARGET.exists():
-        return []
-    found = []
-    for d in TARGET.iterdir():
-        if d.is_dir() and d.name != name and not d.name.startswith("."):
-            if body_hash(d) == want:
-                found.append(d.name)
-    return found
-
-
-def do_install(name: str, force: bool = False, quiet: bool = False) -> bool:
-    src = repo_skill(name)
-    meta = read_skill_meta(src)
-    target = TARGET / name
-    state = load_state()
-
-    if target.exists():
-        changed, reason = local_changed(name, state)
-        if changed and not force:
-            fail(f"「{name}」{reason}，已停止，未做任何修改")
-            say(f"         先备份或确认丢弃，再加 --force 重跑")
-            return False
-        if changed:
-            dest = backup_existing(target)
-            warn(f"已备份旧版本到 {dest}")
-        shutil.rmtree(target)
-
-    TARGET.mkdir(parents=True, exist_ok=True)
-    shutil.copytree(src, target)
-
-    state["installed"][name] = {
-        "version": meta["version"],
-        "hash": digest(file_map(target)),
-        "installed_at": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
-    }
-    save_state(state)
-    if not quiet:
-        ok(f"已安装「{name}」v{meta['version']} → {target}")
-        dups = find_duplicates(name, src)
-        if dups:
-            warn(f"发现疑似重复的旧技能：{'、'.join(dups)}")
-            say(f"         确认是同一份内容后，可删除：{TARGET / dups[0]}")
-    return True
-
-
-# ---------- 命令 ----------
-
-def cmd_list(args) -> None:
-    data = load_manifest()
-    state = load_state()
-    say()
-    say(pad("技能名", 22) + pad("版本", 10) + pad("本地", 8) + "一句话用途")
-    say("-" * 96)
-    for s in data["skills"]:
-        local = state["installed"].get(s["name"], {}).get("version", "—")
-        say(pad(s["name"], 22) + pad("v" + s["version"], 10) + pad(local, 8) + s["summary"])
-    say()
-    say(f"共 {len(data['skills'])} 个技能 · 仓库 {SKILLS_DIR}")
-
-
-def cmd_status(args) -> None:
-    data = load_manifest()
-    state = load_state()
+def cmd_status(args):
+    _, data = inventory(args)
+    local = store.state(args.target)["installed"]
     rows = []
-    for s in data["skills"]:
-        name = s["name"]
-        target = TARGET / name
-        record = state["installed"].get(name)
-        if not target.exists():
-            rows.append((name, s["version"], "—", "未安装", ""))
-            continue
-        local_v = record["version"] if record else "?"
-        local_hash = digest(file_map(target))
-        repo_hash = digest(file_map(SKILLS_DIR / name))
+    for skill in data["skills"]:
+        name, status = skill["name"], "未安装"
+        record = local.get(name)
+        if (args.target / name).exists():
+            if not record or "content_sha256" not in record:
+                status = "无可用安装基线"
+            else:
+                try:
+                    changed = store.fingerprint(store.package(args.target / name, record)) != record["content_sha256"]
+                    status = "本地有改动" if changed else "版本已锁定" if record.get("pinned") else "副本旧于安装版" if record["version"] > skill["version"] else "可更新" if record["version"] < skill["version"] else "已是最新"
+                except ValueError as exc:
+                    status = f"安装异常：{exc}"
+        rows.append({"name": name, "latest": skill["version"], "installed": record.get("version") if record else None,
+                     "status": status, "maturity": skill.get("status", "未记录"), "dependencies": skill.get("dependencies", [])})
+    return {"source": "离线 HEAD" if args.offline else "origin/main", "skills": rows,
+            "pending_publish": sorted(p.stem for p in (store.REPO / ".skillctl-local" / "pending").glob("*.json"))}
+
+
+def cmd_update(args):
+    ref, data = inventory(args)
+    local = store.state(args.target)["installed"]
+    rows, errors = [], []
+    for skill in data["skills"] if args.all else [store.find_skill(data, args.name)]:
+        name = skill["name"]
+        record = local.get(name)
         if not record:
-            status = "本地有目录，无安装记录"
-        elif local_hash != record["hash"]:
-            status = "本地有改动"
-        elif parse_version(s["version"]) > parse_version(record["version"]):
-            status = "可更新"
-        elif local_hash == repo_hash:
-            status = "已是最新"
-        else:
-            status = "内容不一致"
-        rows.append((name, s["version"], local_v, status, ""))
-    say()
-    say(pad("技能名", 22) + pad("仓库", 9) + pad("本地", 9) + "状态")
-    say("-" * 80)
-    for name, rv, lv, st, _ in rows:
-        mark = "" if st in ("已是最新",) else "  ←"
-        say(pad(name, 22) + pad("v" + rv, 9) + pad(lv if lv == "—" else "v" + lv, 9) + st + mark)
-    say()
-    pending = [r[0] for r in rows if r[3] in ("可更新", "未安装")]
-    if pending:
-        say(f"待处理：{'、'.join(pending)}")
-    else:
-        say("本地与仓库一致，无需处理")
-
-
-def cmd_install(args) -> None:
-    if not do_install(args.name, force=args.force):
-        sys.exit(1)
-
-
-def cmd_update(args) -> None:
-    data = load_manifest()
-    state = load_state()
-    targets = [s["name"] for s in data["skills"]] if args.all else [args.name]
-    changed = skipped = 0
-    for name in targets:
-        if not name:
+            rows.append({"name": name, "result": "未安装，跳过"})
             continue
-        record = state["installed"].get(name)
-        if not record:
-            say(f"  [跳过] 「{name}」本地未安装")
+        if record.get("pinned") and not args.unpin:
+            rows.append({"name": name, "result": "版本已锁定，跳过"})
             continue
-        repo_meta = read_skill_meta(SKILLS_DIR / name)
-        if parse_version(repo_meta["version"]) <= parse_version(record["version"]):
-            say(f"  [最新] 「{name}」v{record['version']}")
+        try:
+            if "content_sha256" not in record:
+                raise ValueError("旧安装记录需先 install 接管")
+            if record["version"] > skill["version"]:
+                raise ValueError("当前副本旧于安装版，不能隐式降级；请在线同步")
+            if record["version"] == skill["version"] and not args.unpin:
+                if store.fingerprint(store.package(args.target / name, record)) != record["content_sha256"]:
+                    raise ValueError("本地有未发布修改")
+                rows.append({"name": name, "result": "已是最新"})
+                continue
+            store.install(store.REPO, args.target, skill, store.release(store.REPO, skill, skill["version"], ref), force=args.force)
+            rows.append({"name": name, "version": skill["version"], "result": "已更新"})
+        except ValueError as exc:
+            errors.append({"name": name, "error": str(exc)})
+    print(json.dumps({"results": rows, "errors": errors}, ensure_ascii=False, indent=2))
+    if errors:
+        raise ValueError("部分技能更新失败，未覆盖其本地改动")
+
+
+def cmd_diff(args):
+    ref, data = inventory(args)
+    skill = store.find_skill(data, args.name)
+    record = store.state(args.target)["installed"].get(skill["name"])
+    if not record or "content_sha256" not in record:
+        raise ValueError("缺少受管安装记录")
+    local = store.package(args.target / skill["name"], record)
+    _, remote = store.source(store.REPO, store.release(store.REPO, skill, skill["version"], ref))
+    changes = []
+    for name in sorted(local.keys() | remote.keys()):
+        if local.get(name) == remote.get(name):
             continue
-        say(f"  [更新] 「{name}」v{record['version']} → v{repo_meta['version']}")
-        if do_install(name, force=args.force, quiet=True):
-            changed += 1
-        else:
-            skipped += 1
-    say()
-    if changed:
-        say(f"更新完成，共处理 {changed} 个技能")
-    if skipped:
-        say(f"有 {skipped} 个技能因本地改动被拦下，逐个确认后用 --force 重跑")
-    if not changed and not skipped:
-        say("没有需要更新的技能")
+        row = {"file": name, "status": "新增于远端" if name not in local else "远端已删除" if name not in remote else "内容不同"}
+        try:
+            row["diff"] = "\n".join(unified_diff(local.get(name, b"").decode("utf-8").splitlines(), remote.get(name, b"").decode("utf-8").splitlines(), fromfile=f"local/{name}", tofile=f"remote/{name}", lineterm=""))
+        except UnicodeDecodeError:
+            row["diff"] = "二进制文件不同"
+        changes.append(row)
+    return changes
 
 
-def cmd_diff(args) -> None:
-    name = args.name
-    src = repo_skill(name)
-    target = TARGET / name
-    if not target.exists():
-        raise SystemExit(f"本地未安装「{name}」，无需对比")
-    repo_lines = (src / "SKILL.md").read_text(encoding="utf-8").splitlines()
-    local_lines = (target / "SKILL.md").read_text(encoding="utf-8").splitlines()
-    diff = list(unified_diff(local_lines, repo_lines,
-                             fromfile=f"本地/{name}/SKILL.md",
-                             tofile=f"仓库/{name}/SKILL.md", lineterm=""))
-    if not diff:
-        say(f"「{name}」的 SKILL.md 与仓库完全一致")
-        return
-    say()
-    for line in diff[:400]:
-        say(line)
-    if len(diff) > 400:
-        say(f"... 还有 {len(diff) - 400} 行差异未显示")
+def cmd_verify(args):
+    count = store.verify(store.REPO, args.base)
+    releases = 0
+    if args.deep:
+        for path in (store.REPO / "releases").glob("*/*.json"):
+            store.source(store.REPO, store.read_json(path))
+            releases += 1
+    return {"result": "校验通过", "skills": count, "historical_packages_checked": releases}
 
 
-def append_changelog(name: str, old_v: str, new_v: str, note: str, level: str) -> None:
-    path = REPO / "CHANGELOG.md"
-    today = datetime.now().strftime("%Y-%m-%d")
-    entry = f"- **{today}** `{name}` {old_v} → {new_v}（{level}）" + (f"：{note}" if note else "")
-    if not path.exists():
-        path.write_text("# 变更记录\n\n按时间倒序，最新在最上面。\n\n", encoding="utf-8")
-    lines = path.read_text(encoding="utf-8").splitlines()
-    insert_at = len(lines)
-    for i, line in enumerate(lines):
-        if i > 3 and line.startswith("- **"):
-            insert_at = i
-            break
-    lines.insert(insert_at, entry)
-    path.write_text("\n".join(lines).rstrip() + "\n", encoding="utf-8", newline="\n")
-
-
-def cmd_publish(args) -> None:
-    name = args.name
-    target = TARGET / name
-    if not target.is_dir():
-        raise SystemExit(f"本地没有安装「{name}」，无从发布")
-    dst = SKILLS_DIR / name
-    is_new = not dst.exists()
-
-    if is_new:
-        local_meta = json.loads((target / "skill.json").read_text(encoding="utf-8")) \
-            if (target / "skill.json").exists() else {}
-        new_version = local_meta.get("version", "1.0.0")
-        old_version = "新增"
-    else:
-        old_version = read_skill_meta(dst).get("version", "0.0.0")
-        new_version = bump_version(old_version, args.bump)
-
-    copy_into_repo_name(target, dst)
-
-    meta = json.loads((dst / "skill.json").read_text(encoding="utf-8")) \
-        if (dst / "skill.json").exists() else {}
-    meta.update({
-        "name": name,
-        "version": new_version,
-        "entry": "SKILL.md",
-        "updated": datetime.now().strftime("%Y-%m-%d"),
-        "origin": meta.get("origin", "self"),
-    })
-    meta.setdefault("slug", name)
-    meta.setdefault("summary", "")
-    write_skill_meta(dst, meta)
-
-    data = load_manifest()
-    data["skills"] = [s for s in data["skills"] if s["name"] != name] + [meta]
-    save_manifest(data)
-
-    if is_new:
-        ok(f"已收录新技能「{name}」v{new_version}")
-    else:
-        ok(f"已回写「{name}」v{old_version} → v{new_version}")
-    append_changelog(name, old_version, new_version, args.note, args.bump)
-    git_commit(name, new_version, args.note)
-
-
-def git_commit(name: str, version: str, note: str) -> None:
-    def run(*a):
-        return subprocess.run(["git", "-C", str(REPO), *a],
-                              capture_output=True, text=True, encoding="utf-8", errors="replace")
-    if run("rev-parse", "--git-dir").returncode != 0:
-        warn("不是 git 仓库，跳过提交")
-        return
-    run("add", "-A")
-    msg = f"发布 {name} v{version}" + (f"：{note}" if note else "")
-    r = run("commit", "-m", msg)
-    if r.returncode == 0:
-        ok(f"已提交：{msg}")
-    else:
-        warn(f"提交未成功：{(r.stdout or r.stderr).strip()[:200]}")
-
-
-def cmd_verify(args) -> None:
-    data = load_manifest()
-    problems = 0
-    names = [s["name"] for s in data["skills"]]
-    for s in data["skills"]:
-        d = SKILLS_DIR / s["name"]
-        if not d.is_dir():
-            fail(f"manifest 记录了「{s['name']}」但目录不存在")
-            problems += 1
+def cmd_migrate(args):
+    from skillmigrate import migrate
+    mappings = migrate(store.REPO)
+    for path in (store.REPO / "releases").glob("*/*.json"):
+        entry = store.read_json(path)
+        if not entry.get("source_commit"):
             continue
-        skill_md = d / "SKILL.md"
-        meta_file = d / "skill.json"
-        if not skill_md.exists():
-            fail(f"「{s['name']}」缺少 SKILL.md")
-            problems += 1
-        if not meta_file.exists():
-            fail(f"「{s['name']}」缺少 skill.json")
-            problems += 1
+        tag = entry["release_ref"]
+        existing = store.git(store.REPO, "rev-parse", "--verify", f"refs/tags/{tag}", check=False)
+        if existing and existing != entry["source_commit"]:
+            raise ValueError(f"迁移标签冲突：{tag}")
+        if not existing:
+            store.git(store.REPO, "tag", tag, entry["source_commit"])
+    return {"result": "迁移和本地标签完成，尚未提交或推送", "releases": mappings}
+
+
+def cmd_sync(args):
+    path = store.REPO / ".skillctl-local" / "config.json"
+    current = store.read_json(path) if path.exists() else {"auto_sync": False}
+    if args.enable:
+        current = {"auto_sync": True, "origin": store.git(store.REPO, "remote", "get-url", "origin"), "enabled_at": store.now()}
+        store.write_json(path, current)
+    elif args.disable:
+        current["auto_sync"] = False
+        store.write_json(path, current)
+    return {"auto_sync": current.get("auto_sync", False), "scope": "当前 clone，本机配置，不随包分发"}
+
+
+def cmd_cancel_pending(args):
+    for path in (store.REPO / ".skillctl-local" / "pending").glob("*.json"):
+        pending = store.read_json(path)
+        if args.name not in {pending["meta"]["name"], pending["meta"]["id"]}:
             continue
-        meta = read_skill_meta(d)
-        if meta.get("version") != s.get("version"):
-            fail(f"「{s['name']}」版本不一致：skill.json={meta.get('version')} manifest={s.get('version')}")
-            problems += 1
-        text = skill_md.read_text(encoding="utf-8")
-        if not text.startswith("---"):
-            fail(f"「{s['name']}」SKILL.md 缺少 frontmatter")
-            problems += 1
-        elif f"name: {s['name']}" not in text.split("---")[1]:
-            fail(f"「{s['name']}」frontmatter 的 name 与目录名不一致")
-            problems += 1
-    for d in SKILLS_DIR.iterdir():
-        if d.is_dir() and d.name not in names:
-            warn(f"目录「{d.name}」未登记在 manifest.json")
-    say()
-    say("校验通过，仓库结构一致" if problems == 0 else f"发现 {problems} 个问题")
-    if problems:
-        sys.exit(1)
+        ident, commit = pending["meta"]["id"], pending["commit"]
+        archive = store.REPO / ".skillctl-local" / "archive" / f"{ident}-{commit}.json"
+        store.write_json(archive, pending)
+        store.git(store.REPO, "update-ref", f"refs/skillctl/archive/{ident}/{commit}", commit)
+        path.unlink()
+        store.git(store.REPO, "update-ref", "-d", f"refs/skillctl/pending/{ident}", commit)
+        return {"result": "待同步发布已归档，本地文件和远端版本未改动", "archive": str(archive), "commit": commit}
+    raise ValueError("未找到对应待同步发布")
 
 
-def main() -> None:
-    init_stdout()
-    parser = argparse.ArgumentParser(prog="skillctl", description="技能库版本管理与安装工具")
-    parser.add_argument("--target", default=str(TARGET),
-                        help="技能安装目录，默认 ~/.workbuddy/skills")
-    sub = parser.add_subparsers(dest="cmd", required=True)
-
-    sub.add_parser("list", help="列出仓库里的技能").set_defaults(func=cmd_list)
-    sub.add_parser("status", help="对比本地安装与仓库版本").set_defaults(func=cmd_status)
-
-    p = sub.add_parser("install", help="安装技能到本地")
-    p.add_argument("name")
-    p.add_argument("--force", action="store_true", help="本地有改动时强制覆盖（会先备份）")
-    p.set_defaults(func=cmd_install)
-
-    p = sub.add_parser("update", help="更新已安装的技能")
-    p.add_argument("name", nargs="?", default=None)
-    p.add_argument("--all", action="store_true")
-    p.add_argument("--force", action="store_true")
-    p.set_defaults(func=cmd_update)
-
-    p = sub.add_parser("diff", help="对比本地与仓库内容")
-    p.add_argument("name")
-    p.set_defaults(func=cmd_diff)
-
-    p = sub.add_parser("publish", help="把本地改动回写仓库并升版本")
-    p.add_argument("name")
-    p.add_argument("--bump", choices=["patch", "minor", "major"], default="patch")
-    p.add_argument("--note", default="")
-    p.set_defaults(func=cmd_publish)
-
-    sub.add_parser("verify", help="校验仓库结构一致性").set_defaults(func=cmd_verify)
-
-    args = parser.parse_args()
-    set_target(args.target)
-    if args.cmd == "update" and not args.all and not args.name:
-        parser.error("update 需要指定技能名，或使用 --all")
-    args.func(args)
+def main(argv=None):
+    for stream in (sys.stdout, sys.stderr):
+        if hasattr(stream, "reconfigure"):
+            stream.reconfigure(encoding="utf-8")
+    parser = argparse.ArgumentParser(description="Skill 整数版本、历史安装与同步管理")
+    parser.add_argument("--target", type=Path, default=Path(os.environ.get("SKILLCTL_TARGET", str(Path.home() / ".workbuddy" / "skills"))))
+    sub = parser.add_subparsers(dest="command", required=True)
+    for command in ("list", "status", "history", "install", "update", "diff", "verify", "migrate", "publish", "sync", "cancel-pending"):
+        p = sub.add_parser(command)
+        p.add_argument("--json", action="store_true", help="结构化 JSON 输出（默认也为 JSON）")
+        if command in {"list", "status", "history", "install", "update", "diff"}:
+            p.add_argument("--offline", action="store_true", help="仅使用本地 HEAD，不声称为远端最新")
+        if command in {"install", "diff", "publish", "cancel-pending"}:
+            p.add_argument("name")
+        if command == "history":
+            group = p.add_mutually_exclusive_group(required=True)
+            group.add_argument("name", nargs="?")
+            group.add_argument("--all", action="store_true")
+            p.add_argument("--revisions", action="store_true")
+        if command == "install":
+            p.add_argument("--version", type=int)
+            p.add_argument("--force", action="store_true", help="覆盖前自动备份")
+        if command == "update":
+            group = p.add_mutually_exclusive_group(required=True)
+            group.add_argument("name", nargs="?")
+            group.add_argument("--all", action="store_true")
+            p.add_argument("--force", action="store_true")
+            p.add_argument("--unpin", action="store_true", help="明确解除版本锁定并更新")
+        if command == "verify":
+            p.add_argument("--base", help="检查既有发布记录未被改写")
+            p.add_argument("--deep", action="store_true", help="逐版校验历史业务快照")
+        if command == "publish":
+            p.add_argument("--note", required=True)
+            p.add_argument("--new", action="store_true", help="明确新增技能，需本地 skill.json")
+            p.add_argument("--id", help="新技能稳定英文 id")
+            p.add_argument("--adopt", action="store_true", help="同一可信来源的新 clone 接管已有安装")
+        if command == "sync":
+            group = p.add_mutually_exclusive_group()
+            group.add_argument("--enable", action="store_true", help="所有者启用当前 clone 的自动回传")
+            group.add_argument("--disable", action="store_true")
+    args = parser.parse_args(argv)
+    args.target = args.target.expanduser().resolve()
+    if getattr(args, "version", None) is not None and args.version < 1:
+        parser.error("--version 必须为正整数")
+    try:
+        with ExitStack() as locks:
+            if args.command in {"install", "update", "publish", "migrate", "sync", "cancel-pending"}:
+                locks.enter_context(store.operation_lock(store.REPO / ".skillctl-local" / "operation.lock"))
+            if args.command in {"install", "update", "publish"}:
+                key = hashlib.sha256(str(args.target).encode()).hexdigest()[:16]
+                locks.enter_context(store.operation_lock(args.target.parent / f".skillctl-target-{key}.lock"))
+            if args.command == "publish":
+                from skillpublish import publish
+                value = publish(store.REPO, args)
+            else:
+                value = globals()["cmd_" + args.command.replace("-", "_")](args)
+        if value is not None:
+            print(json.dumps(value, ensure_ascii=False, indent=2))
+    except (ValueError, OSError, KeyError, SyntaxError) as exc:
+        print(f"失败：{exc}", file=sys.stderr)
+        return 1
+    return 0
 
 
 if __name__ == "__main__":
-    main()
+    sys.exit(main())
