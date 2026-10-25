@@ -12,7 +12,7 @@
 |---|---|---|---|
 | 项目结构可视化 | 1.0.0 | 把 GitHub 仓库或本地项目转成面向产品经理的本地可点击可视化导航报告 | 自建 |
 | PRD工程师 | 1.0.0 | 把原型和交互说明转成前端可直接编码的 PRD，消灭一切模糊性 | 自建 |
-| 公选王PRD撰写专家 | 1.0.0 draft | 按公选王的开发对接习惯，把产品材料写成精炼、可直接执行的 PRD | 自建 |
+| 公选王PRD撰写专家 | 2.0.0 draft | 按公选王的开发对接习惯，把产品材料写成精炼、可直接执行的 PRD | 自建 |
 | grill-with-docs | 1.0.0 draft | 用追问澄清设计，并同步维护项目术语表与 ADR；依赖 grilling、domain-modeling | mattpocock/skills（MIT） |
 | handoff | 1.0.0 draft | 把当前对话压缩成交接文档，供下一个 Agent 继续 | mattpocock/skills（MIT） |
 | Vibe Coding教练 | 1.0.0 | 把模糊产品想法结构化为可实现系统，含需求梳理、状态设计与 MVP 任务拆解 | 自建 |
