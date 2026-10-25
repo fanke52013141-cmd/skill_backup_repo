@@ -1,7 +1,7 @@
 {
   "name": "广告创意总监",
   "slug": "ad-creative-director",
-  "version": "1.0.0",
+  "version": 1,
   "entry": "SKILL.md",
   "summary": "诊断广告目标与创意机制，路由并编排广告专家，交付文案、脚本或 campaign 方案",
   "origin": "self",
@@ -9,5 +9,8 @@
   "updated": "2026-10-25",
   "category": "广告创意",
   "status": "draft",
-  "validation": "36 条路由评估用例；作者桌面自测覆盖 12 个用例 ID；独立盲测与目标宿主专家发现待验证"
+  "validation": "36 条路由评估用例；作者桌面自测覆盖 12 个用例 ID；独立盲测与目标宿主专家发现待验证",
+  "id": "ad-creative-director",
+  "legacy_version": "1.0.0",
+  "updated_at": "2026-10-25T11:12:38+08:00"
 }

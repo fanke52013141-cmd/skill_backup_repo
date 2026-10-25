@@ -1,0 +1,12 @@
+{
+  "legacy_version": "1.0.0",
+  "source_commit": "a8ef98a9322fcd82579b3c32021c3939cdb1a010",
+  "schema": 2,
+  "id": "ad-creative-director",
+  "name": "广告创意总监",
+  "version": 1,
+  "updated_at": "2026-10-25T11:12:38+08:00",
+  "note": "旧版 1.0.0 映射；新增广告创意总监技能",
+  "release_ref": "skill/ad-creative-director/v1",
+  "content_sha256": "3c725ad50d04b1e7885b635d38a61f95e795a34688eb0334b2fc012a63612efe"
+}

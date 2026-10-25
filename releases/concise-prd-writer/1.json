@@ -1,0 +1,12 @@
+{
+  "legacy_version": "1.0.0",
+  "source_commit": "a99baa1b386715375c19d6229788e308e72bbd15",
+  "schema": 2,
+  "id": "concise-prd-writer",
+  "name": "公选王PRD撰写专家",
+  "version": 1,
+  "updated_at": "2026-10-25T15:48:31+08:00",
+  "note": "旧版 1.0.0 映射；发布 公选王PRD撰写专家 v1.0.0：新增公司专用精炼 PRD 撰写技能，包含三级结构示例、写作规范、模板与触发用例",
+  "release_ref": "skill/concise-prd-writer/v1",
+  "content_sha256": "a0a9e47a800b600068d73bf43341e124bc54752d6dd443407524a4505e830454"
+}

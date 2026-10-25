@@ -1,0 +1,12 @@
+{
+  "legacy_version": "1.0.0",
+  "source_commit": "69cc44a9f92c9a5f35d023078ec6fb82e9afcdf6",
+  "schema": 2,
+  "id": "handoff",
+  "name": "handoff",
+  "version": 1,
+  "updated_at": "2026-10-25T22:28:00+08:00",
+  "note": "旧版 1.0.0 映射；发布 handoff v1.0.0：从 mattpocock/skills 同步会话压缩与 Agent 交接技能",
+  "release_ref": "skill/handoff/v1",
+  "content_sha256": "3d2dc5e3f13599842466c22b41b17935713ca2c08b1521f21d5eb01d16b5fc99"
+}

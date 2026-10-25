@@ -1,0 +1,12 @@
+{
+  "legacy_version": "1.0.0",
+  "source_commit": "59abbc3253f6c787d2ebf86e352ff70a30f9f3f0",
+  "schema": 2,
+  "id": "scene-visual-design",
+  "name": "场景视觉设计",
+  "version": 1,
+  "updated_at": "2026-10-24T01:04:40+08:00",
+  "note": "旧版 1.0.0 映射；新增五个中文视频制作技能并融合公开专家方法",
+  "release_ref": "skill/scene-visual-design/v1",
+  "content_sha256": "d45e18e1d701f0f7090b77ffc169a9fc2b897e1c4a5a714498c3fedb993ecddc"
+}

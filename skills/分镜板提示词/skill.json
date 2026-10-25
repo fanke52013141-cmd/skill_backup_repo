@@ -1,7 +1,7 @@
 {
   "name": "分镜板提示词",
   "slug": "storyboard-panel-prompts",
-  "version": "1.0.0",
+  "version": 1,
   "entry": "SKILL.md",
   "summary": "把已有镜头组与视觉规范转为每板最多四格的静态分镜板提示词，保持镜序和连续性。",
   "origin": "self-with-research",
@@ -9,5 +9,8 @@
   "updated": "2026-10-24",
   "category": "视频制作/分镜预演",
   "status": "draft",
-  "validation": "结构校验与作者桌面案例；独立前向与实际生成待测试"
+  "validation": "结构校验与作者桌面案例；独立前向与实际生成待测试",
+  "id": "storyboard-panel-prompts",
+  "legacy_version": "1.0.0",
+  "updated_at": "2026-10-24T01:04:40+08:00"
 }

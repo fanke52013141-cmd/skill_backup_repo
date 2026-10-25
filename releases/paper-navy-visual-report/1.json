@@ -1,0 +1,12 @@
+{
+  "legacy_version": "1.0.0",
+  "source_commit": "55aeedc12fea5b62dedd5dd85ebf44b8a0b087d7",
+  "schema": 2,
+  "id": "paper-navy-visual-report",
+  "name": "报告可视化",
+  "version": 1,
+  "updated_at": "2026-10-23T10:34:24+08:00",
+  "note": "旧版 1.0.0 映射；初始化技能库：7 个技能入库，统一中文命名与版本号 v1.0.0",
+  "release_ref": "skill/paper-navy-visual-report/v1",
+  "content_sha256": "228c2d756c1e81e926a076d435b0c86ba7ebd9e03f897cf78769d1a837145f2b"
+}

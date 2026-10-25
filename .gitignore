@@ -1,7 +1,9 @@
 __pycache__/
-*.pyc
-*.pyo
+*.py[cod]
 .DS_Store
 Thumbs.db
 .unzip_tmp/
 .venv/
+.skillctl-local/
+.env
+*.local.*

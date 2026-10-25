@@ -1,10 +1,13 @@
 {
   "name": "需求文档审查",
   "slug": "prd-review-officer",
-  "version": "1.0.0",
+  "version": 1,
   "entry": "SKILL.md",
   "summary": "对 PRD 做完整性、一致性、体验、可行性四轮审查，输出问题清单或评审报告",
   "origin": "self",
   "source": "桌面 skills库/需求文档审查.md",
-  "updated": "2026-10-23"
+  "updated": "2026-10-23",
+  "id": "prd-review-officer",
+  "legacy_version": "1.0.0",
+  "updated_at": "2026-10-23T10:34:24+08:00"
 }
