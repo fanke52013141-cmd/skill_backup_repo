@@ -1,10 +1,18 @@
 {
   "name": "项目结构可视化",
   "slug": "project_visualizer",
-  "version": "1.0.0",
+  "version": "2.0",
   "entry": "SKILL.md",
   "summary": "把 GitHub 仓库或本地项目转成面向产品经理的本地可点击可视化导航报告",
   "origin": "self",
   "source": "桌面 skills库/github项目可视化.md",
-  "updated": "2026-10-23"
+  "updated": "2026-10-26",
+  "category": "开发相关",
+  "subcategory": "项目理解",
+  "tags": [
+    "产品经理",
+    "可视化",
+    "GitHub"
+  ],
+  "content_type": "Skill"
 }

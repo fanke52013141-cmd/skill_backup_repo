@@ -1,13 +1,19 @@
 {
   "name": "视频镜头提示词",
   "slug": "video-shot-prompts",
-  "version": "1.0.0",
+  "version": "2.0",
   "entry": "SKILL.md",
   "summary": "把文字、图片与音频参考转为可复制的中文视频镜头指令，处理动作、运镜与声音。",
   "origin": "self-with-research",
   "source": "用户提供提示词与经核实公开专家资料",
-  "updated": "2026-10-24",
-  "category": "视频制作/镜头执行",
+  "updated": "2026-10-26",
+  "category": "视频创作",
   "status": "draft",
-  "validation": "结构校验与作者桌面案例；独立前向与实际生成待测试"
+  "validation": "结构校验与作者桌面案例；独立前向与实际生成待测试",
+  "subcategory": "视频生成",
+  "tags": [
+    "视频提示词",
+    "运镜"
+  ],
+  "content_type": "Skill"
 }

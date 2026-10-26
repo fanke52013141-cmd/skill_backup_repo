@@ -1,10 +1,17 @@
 {
   "name": "提示词工程师",
   "slug": "prompt-engineer",
-  "version": "1.0.0",
+  "version": "2.0",
   "entry": "SKILL.md",
   "summary": "诊断、优化或从零构建提示词，输出可直接复制使用的版本",
   "origin": "self",
   "source": "桌面 skills库/提示词撰写skill.md",
-  "updated": "2026-10-23"
+  "updated": "2026-10-26",
+  "category": "提示词与 Skill 构建",
+  "subcategory": "提示词构建",
+  "tags": [
+    "提示词优化",
+    "通用能力"
+  ],
+  "content_type": "Skill"
 }

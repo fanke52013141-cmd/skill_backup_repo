@@ -16,3 +16,9 @@
 - 运行 `python tools/skillctl.py verify`。修改版本工具时运行 `python -m unittest discover -s tools -p test_skillctl.py`。
 - 区分结构检查、作者桌面演练、独立生成和真实材料端到端验证；未执行的验证写明待执行。
 - 不重写历史版本、不强制推送、不把其他 Skill 的内容顺带修改。
+
+## 分类维护
+
+- 一级分类统一为：提示词与 Skill 构建、视频创作、产品经理、开发相关、其他。按主要工作用途归类，交叉用途使用 tags，不移动或复制现有技能目录。
+- 分类字段唯一真源是各技能 skill.json：category、subcategory、content_type、tags；通过 skillctl 的 save_manifest 索引函数生成 manifest，并同步 README 与分类索引。
+- 新内容优先归现有分类；暂不能归类时放其他，后续有实际需求再扩展。原始提示词保持来源存档身份，并链接对应 Skill。
