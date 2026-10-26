@@ -1,13 +1,13 @@
 {
   "name": "公选王PRD撰写专家",
   "slug": "concise-prd-writer",
-  "version": "2.0.0",
+  "version": "3.0",
   "entry": "SKILL.md",
-  "summary": "按公选王的开发对接习惯，把产品材料写成精炼、可直接执行的 PRD",
+  "summary": "按公选王开发对接习惯，逐项覆盖原型、字段、状态、弹窗与角色差异，写重点明确的 PRD",
   "origin": "self",
   "source": "基于用户提供的 AI 考试需求文档与既有 PRD 写作规范构建；未收录原始文档",
-  "updated": "2026-10-25",
+  "updated": "2026-10-26",
   "category": "产品与需求",
   "status": "draft",
-  "validation": "Skill 结构校验 0 error/0 warn；v2.0 明确删除本期建议实施范围、关键验收场景和逐页原型输出，保留并强化待确认清单；独立前向测试待执行"
+  "validation": "结构与引用校验、五组作者桌面效果演练已完成；强化字段逐行、状态独立说明、原型弹窗覆盖与角色差异；独立前向生成及真实原型端到端验证待执行"
 }

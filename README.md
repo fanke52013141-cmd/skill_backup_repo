@@ -12,7 +12,7 @@
 |---|---|---|---|
 | 项目结构可视化 | 1.0.0 | 把 GitHub 仓库或本地项目转成面向产品经理的本地可点击可视化导航报告 | 自建 |
 | PRD工程师 | 1.0.0 | 把原型和交互说明转成前端可直接编码的 PRD，消灭一切模糊性 | 自建 |
-| 公选王PRD撰写专家 | 2.0.0 draft | 按公选王的开发对接习惯，把产品材料写成精炼、可直接执行的 PRD | 自建 |
+| 公选王PRD撰写专家 | 3.0 draft | 逐项覆盖原型、字段、状态、弹窗与角色差异，写重点明确的开发 PRD | 自建 |
 | grill-with-docs | 1.0.0 draft | 用追问澄清设计，并同步维护项目术语表与 ADR；依赖 grilling、domain-modeling | mattpocock/skills（MIT） |
 | handoff | 1.0.0 draft | 把当前对话压缩成交接文档，供下一个 Agent 继续 | mattpocock/skills（MIT） |
 | Vibe Coding教练 | 1.0.0 | 把模糊产品想法结构化为可实现系统，含需求梳理、状态设计与 MVP 任务拆解 | 自建 |
@@ -50,22 +50,24 @@ python tools/skillctl.py --target ~/.codex/skills install 角色视觉设计
 改完技能要回写：
 
 ```bash
-python tools/skillctl.py publish 报告可视化 --bump minor --note "新增表格密度规则"
+python tools/skillctl.py publish 报告可视化 --note "新增表格密度规则及对应示例"
 ```
 
-`--bump` 三档：`patch` 措辞修订、`minor` 加内容、`major` 流程或输出格式变了。
+每次发布按整数递增，必须填写非空 `--note`。旧 `--bump patch/minor/major` 仅为命令兼容别名，全部执行相同的整数递增。
 
 ## 版本规则
 
-版本号只写在一处：`skills/<技能名>/skill.json`。`SKILL.md` 的 frontmatter 只负责触发（`name` + `description`），不写版本，避免两份值打架。
+版本唯一真源是 `skills/<技能名>/skill.json`，manifest 是工具生成的机器索引，README 是展示副本；修改后保持一致。`SKILL.md` 不写版本号。
 
-| 改了什么 | 升哪一位 | 例子 |
-|---|---|---|
-| 措辞、错别字、description 微调 | patch | 1.0.0 → 1.0.1 |
-| 新增步骤 / 示例 / 脚本，老用法不变 | minor | 1.0.1 → 1.1.0 |
-| 流程重构、输出格式变更、改名 | major | 1.1.0 → 2.0.0 |
+**自 2026-10-26 起，统一采用整数版本：`1.0 → 2.0 → 3.0 → 4.0 → 5.0 → 6.0`。**
 
-技能没有 API，所以「破坏性」的判定标准是：**原来的说法不再触发，或者产出的东西结构变了**。
+- 新增 Skill 从 `1.0` 开始；每次正式更新，不论修改大小，整数部分加一，小数部分固定为 `0`。
+- 不再按 patch / minor / major 分级，不生成 `2.1`、`2.0.1` 等版本。
+- 历史三段版本与历史变更记录原样保留，等下次更新时迁移，例如 `2.0.0 → 3.0`；不为统一格式批量改号。
+- 每次更新同步单技能元数据、manifest 与 README 展示版本，并在 CHANGELOG 顶部备注日期、旧版 → 新版、修改内容、原因与验证范围。未执行的验证明确写待执行。
+- 规则同时写在 [AGENTS.md](AGENTS.md)，供后续 Agent 执行；版本工具已按此规则生成新版本。
+
+验证版本工具：`python -m unittest discover -s tools -p test_skillctl.py`。
 
 ## 安装器行为
 
@@ -96,7 +98,7 @@ skill_backup_repo/
 在 `~/.workbuddy/skills/` 下建好技能目录（含 `SKILL.md` 和 `skill.json`），然后：
 
 ```bash
-python tools/skillctl.py publish 新技能名
+python tools/skillctl.py publish 新技能名 --note "新增技能：说明用途、内容与验证范围"
 ```
 
 会自动收录进仓库、写入 manifest、提交一次 commit。

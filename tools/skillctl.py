@@ -11,7 +11,7 @@
     python tools/skillctl.py install 报告可视化 [--force]
     python tools/skillctl.py update --all [--force]
     python tools/skillctl.py diff 报告可视化
-    python tools/skillctl.py publish 报告可视化 --bump patch --note "改了验收清单"
+    python tools/skillctl.py publish 报告可视化 --note "改了验收清单"
     python tools/skillctl.py verify
 """
 
@@ -20,6 +20,7 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import re
 import shutil
 import subprocess
 import sys
@@ -169,13 +170,13 @@ def parse_version(v: str) -> tuple:
     return tuple(parts[:3])
 
 
-def bump_version(version: str, level: str) -> str:
-    major, minor, patch = parse_version(version)
-    if level == "major":
-        return f"{major + 1}.0.0"
-    if level == "minor":
-        return f"{major}.{minor + 1}.0"
-    return f"{major}.{minor}.{patch + 1}"
+def bump_version(version: str, level: str = "next") -> str:
+    """每次发布整数部分加一；兼容读取旧三段版本，不继续生成它们。"""
+    if level not in {"next", "patch", "minor", "major"}:
+        raise ValueError(f"不支持的升版方式：{level}")
+    if not re.fullmatch(r"[1-9]\d*\.(?:0|\d+\.\d+)", str(version)):
+        raise SystemExit(f"无效版本「{version}」；当前格式为 N.0，旧版可为 N.x.y")
+    return f"{int(str(version).split('.')[0]) + 1}.0"
 
 
 # ---------- 安装动作 ----------
@@ -394,6 +395,11 @@ def append_changelog(name: str, old_v: str, new_v: str, note: str, level: str) -
 
 def cmd_publish(args) -> None:
     name = args.name
+    note = args.note.strip()
+    if not note:
+        raise SystemExit("发布必须填写非空 --note，说明变更内容与原因")
+    if args.bump != "next":
+        warn("--bump patch/minor/major 仅兼容旧命令；统一按 N.0 → (N+1).0 升版")
     target = TARGET / name
     if not target.is_dir():
         raise SystemExit(f"本地没有安装「{name}」，无从发布")
@@ -401,12 +407,10 @@ def cmd_publish(args) -> None:
     is_new = not dst.exists()
 
     if is_new:
-        local_meta = json.loads((target / "skill.json").read_text(encoding="utf-8")) \
-            if (target / "skill.json").exists() else {}
-        new_version = local_meta.get("version", "1.0.0")
+        new_version = "1.0"
         old_version = "新增"
     else:
-        old_version = read_skill_meta(dst).get("version", "0.0.0")
+        old_version = read_skill_meta(dst).get("version", "")
         new_version = bump_version(old_version, args.bump)
 
     copy_into_repo_name(target, dst)
@@ -432,8 +436,8 @@ def cmd_publish(args) -> None:
         ok(f"已收录新技能「{name}」v{new_version}")
     else:
         ok(f"已回写「{name}」v{old_version} → v{new_version}")
-    append_changelog(name, old_version, new_version, args.note, args.bump)
-    git_commit(name, new_version, args.note)
+    append_changelog(name, old_version, new_version, note, "整数递增")
+    git_commit(name, new_version, note)
 
 
 def git_commit(name: str, version: str, note: str) -> None:
@@ -518,8 +522,9 @@ def main() -> None:
 
     p = sub.add_parser("publish", help="把本地改动回写仓库并升版本")
     p.add_argument("name")
-    p.add_argument("--bump", choices=["patch", "minor", "major"], default="patch")
-    p.add_argument("--note", default="")
+    p.add_argument("--bump", choices=["next", "patch", "minor", "major"], default="next",
+                   help="统一整数递增；patch/minor/major 仅作为旧命令兼容别名")
+    p.add_argument("--note", required=True, help="必填：本次修改内容与原因")
     p.set_defaults(func=cmd_publish)
 
     sub.add_parser("verify", help="校验仓库结构一致性").set_defaults(func=cmd_verify)
