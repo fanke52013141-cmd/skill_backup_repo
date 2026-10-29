@@ -1,0 +1,21 @@
+{
+  "name": "技能构建专家",
+  "slug": "skill-architecture-expert",
+  "version": "3.0",
+  "entry": "SKILL.md",
+  "summary": "将可复用经验构建、重构和评估为可稳定触发、可执行、可验证的 Skill 文件包",
+  "origin": "self",
+  "source": "用户上传的技能构建专家 2.0.0 与本地 skill构建专家 1.0.0 合并升级",
+  "updated": "2026-10-29",
+  "category": "提示词与 Skill 构建",
+  "subcategory": "Skill 构建",
+  "status": "draft",
+  "validation": "合并版静态校验、脚本语法检查与规则回归已完成；真实会话触发率和独立生成效果待执行",
+  "tags": [
+    "Skill 构建",
+    "SKILL.md",
+    "触发优化",
+    "安全校验"
+  ],
+  "content_type": "Skill"
+}

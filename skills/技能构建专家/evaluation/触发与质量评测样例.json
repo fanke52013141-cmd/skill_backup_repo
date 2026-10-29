@@ -1,0 +1,222 @@
+{
+  "schema": 1,
+  "skill_name": "技能构建专家",
+  "notes": "版本仅以 skill.json 为真源。触发用例需在独立新会话中运行；静态校验不能替代真实触发和生成效果验证。",
+  "trigger_evals": [
+    {
+      "id": "trig-pos-1",
+      "category": "typical_positive",
+      "query": "帮我写一个用于 Claude Code 的 Skill，把项目里的旧版 Moment.js 代码自动迁移到 Day.js，并跑测试验证。",
+      "should_trigger": true,
+      "rationale": "典型的代码迁移类 Skill 构建请求，明确了平台与目标。"
+    },
+    {
+      "id": "trig-pos-2",
+      "category": "implicit_positive",
+      "query": "我们团队每次上线前都要按这份检查表手动核对数据库迁移脚本和回滚方案，能不能把刚才跑通的检查流程沉淀下来，以后让 AI 自动按这个标准执行？",
+      "should_trigger": true,
+      "rationale": "未显式提到 SKILL.md，但意图是沉淀高频、有标准、可验证的流程。"
+    },
+    {
+      "id": "trig-pos-3",
+      "category": "troubleshooting_positive",
+      "query": "我写了一个处理接口文档的 SKILL.md，但是它老是不触发，反而写普通业务代码时乱触发，帮我改一下。",
+      "should_trigger": true,
+      "rationale": "技能触发率优化与排障诉求。"
+    },
+    {
+      "id": "trig-pos-4",
+      "category": "authoring_positive",
+      "query": "我想写一个 SKILL.md，该怎么写？",
+      "should_trigger": true,
+      "rationale": "直接询问技能主文件的编写方法。"
+    },
+    {
+      "id": "trig-pos-5",
+      "category": "refactor_positive",
+      "query": "重构一下现有这个 Skill，太长了。",
+      "should_trigger": true,
+      "rationale": "已有技能的精简与重构。"
+    },
+    {
+      "id": "trig-pos-6",
+      "category": "routing_positive",
+      "query": "怎么判断一件事该写 Skill 还是 Rule？",
+      "should_trigger": true,
+      "rationale": "技能形态准入判断属于本技能核心职责。"
+    },
+    {
+      "id": "trig-pos-7",
+      "category": "description_positive",
+      "query": "Skill 的 description 有什么写法规范？",
+      "should_trigger": true,
+      "rationale": "触发层编写与优化。"
+    },
+    {
+      "id": "trig-pos-8",
+      "category": "partial_refactor_positive",
+      "query": "帮我给这个 Skill 补几个示例和验证清单。",
+      "should_trigger": true,
+      "rationale": "已有技能的局部完善。"
+    },
+    {
+      "id": "trig-pos-9",
+      "category": "english_positive",
+      "query": "Make this workflow into a Cursor skill and add a few trigger tests.",
+      "should_trigger": true,
+      "rationale": "英文构建请求与评测要求。"
+    },
+    {
+      "id": "trig-pos-10",
+      "category": "complexity_positive",
+      "query": "我这个 SKILL.md 已经 500 多行了，要不要拆成主 Skill 和子 Skill？",
+      "should_trigger": true,
+      "rationale": "复杂度分层与渐进式披露判断。"
+    },
+    {
+      "id": "trig-pos-11",
+      "category": "explicit_name_positive",
+      "query": "用技能构建专家帮我写一个处理日志的技能。",
+      "should_trigger": true,
+      "rationale": "中文技能名直接调用。"
+    },
+    {
+      "id": "trig-pos-12",
+      "category": "audit_positive",
+      "query": "帮我审查这个自建技能目录的脚本有没有交互命令、硬编码密钥和失效引用。",
+      "should_trigger": true,
+      "rationale": "自建技能的目录、脚本与安全规范审计。"
+    },
+    {
+      "id": "trig-neg-1",
+      "category": "near_miss_negative",
+      "query": "帮我直接把这段 Moment.js 代码改写成 Day.js：moment().add(7, 'days').format('YYYY-MM-DD')。",
+      "should_trigger": false,
+      "rationale": "只要求单次代码转换，不要求构建可复用 Skill。"
+    },
+    {
+      "id": "trig-neg-2",
+      "category": "near_miss_negative",
+      "query": "请帮我写一段 Python 脚本，读取 config.yaml 并打印 name 和 description 字段。",
+      "should_trigger": false,
+      "rationale": "普通 Python 脚本任务，与构建 Agent Skill 无关。"
+    },
+    {
+      "id": "trig-neg-3",
+      "category": "rule_negative",
+      "query": "所有回复都用中文，技术名词保留英文。",
+      "should_trigger": false,
+      "rationale": "永远生效的一句话约束，应写 Rule。"
+    },
+    {
+      "id": "trig-neg-4",
+      "category": "one_off_negative",
+      "query": "帮我把这个项目从 npm 迁到 pnpm。",
+      "should_trigger": false,
+      "rationale": "当场执行的项目迁移，没有要求沉淀技能。"
+    },
+    {
+      "id": "trig-neg-5",
+      "category": "external_install_negative",
+      "query": "帮我从 GitHub 下载并安装一个别人的 Skill。",
+      "should_trigger": false,
+      "rationale": "外部来源技能安装审计，应转交当前环境的审计安装能力。"
+    },
+    {
+      "id": "trig-neg-6",
+      "category": "code_review_negative",
+      "query": "审查一下这段业务代码有没有问题。",
+      "should_trigger": false,
+      "rationale": "普通代码审查，不是 Skill 包审查。"
+    },
+    {
+      "id": "trig-neg-7",
+      "category": "memory_negative",
+      "query": "记住：本项目用 pnpm，测试用 Vitest。",
+      "should_trigger": false,
+      "rationale": "项目事实应写入 Memory。"
+    },
+    {
+      "id": "trig-neg-8",
+      "category": "ordinary_task_negative",
+      "query": "帮我把这份 Excel 清洗一下。",
+      "should_trigger": false,
+      "rationale": "普通数据处理任务，不要求生成技能。"
+    },
+    {
+      "id": "trig-edge-1",
+      "category": "edge_case",
+      "query": "这个能不能做成技能？",
+      "should_trigger": true,
+      "rationale": "应触发并先执行形态判断。"
+    },
+    {
+      "id": "trig-edge-2",
+      "category": "edge_case",
+      "query": "帮我做个处理数据的 Skill。",
+      "should_trigger": true,
+      "rationale": "应触发但停止生成正文，先追问目标和处理流程。"
+    },
+    {
+      "id": "trig-edge-3",
+      "category": "edge_case",
+      "query": "把我的编码规范整理一下。",
+      "should_trigger": true,
+      "rationale": "应触发并澄清应沉淀为 Rule 还是 Skill。"
+    },
+    {
+      "id": "trig-edge-4",
+      "category": "edge_case",
+      "query": "这个流程以后每周都要跑，用默认值直接生成技能。",
+      "should_trigger": true,
+      "rationale": "应触发、补全默认值并标注已推断项。"
+    }
+  ],
+  "functional_evals": [
+    {
+      "id": "func-1",
+      "scenario": "必填维度缺失时的追问拦截测试",
+      "prompt": "帮我写一个自动做代码重构的 Skill。",
+      "expected_behavior": "识别具体触发场景、重构目标、技术栈和核心处理流程未明确，仅针对缺失项追问，不生成大段泛化正文。",
+      "assertions": [
+        "回复包含 Skill / Rule / 不沉淀的准入判断",
+        "明确指出缺失的必填维度",
+        "未在关键维度未知时输出长篇 SKILL.md 正文"
+      ]
+    },
+    {
+      "id": "func-2",
+      "scenario": "全局一句话约束分流为 Rule",
+      "prompt": "帮我写个 Skill，要求以后所有回复都必须用中文，并且代码缩进统一用 2 个空格。",
+      "expected_behavior": "识别为全局常驻约束，建议 Rule 而非强行生成 Skill。",
+      "assertions": [
+        "明确判断更适合 Rule 并说明原因",
+        "提供可直接使用的 Rule 表述"
+      ]
+    },
+    {
+      "id": "func-3",
+      "scenario": "信息齐备时的完整生成与自检",
+      "prompt": "构建一个名为日志敏感信息脱敏的 Skill，扫描 Python logging 语句，将手机号、身份证号和邮箱替换为脱敏函数调用；触发词为脱敏日志、排查日志隐私泄露；不处理数据库加密；其他细节用默认值。",
+      "expected_behavior": "标注推断项，选择轻量或中等模板，生成完整技能并执行静态校验。",
+      "assertions": [
+        "description 同时包含目标、触发意图、技术栈、主要动作与排除范围",
+        "推断细节标注为 [已推断]",
+        "示例覆盖典型、边界、失败三类并附判断说明",
+        "提供可执行验证方式并报告真实验证限制"
+      ]
+    },
+    {
+      "id": "func-4",
+      "scenario": "WorkBuddy 元数据与版本唯一真源",
+      "prompt": "把这个流程做成 WorkBuddy 技能并升级到下一版，按我的仓库规则发布。",
+      "expected_behavior": "保持目录名、Frontmatter name 与 skill.json name 一致，版本仅写入 skill.json，并同步索引和变更记录。",
+      "assertions": [
+        "包含 agent_created: true",
+        "SKILL.md 和评测文件不重复记录技能版本",
+        "遵循目标仓库升版规则，不自行生成 2.1 或 2.0.1",
+        "发布备注包含修改内容、原因和验证限制"
+      ]
+    }
+  ]
+}
