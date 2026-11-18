@@ -3,7 +3,7 @@
 """skillctl — 技能库版本管理与安装工具
 
 仓库是唯一真相源，~/.workbuddy/skills 只是部署产物。
-安装器只搬不改：所有内容规范化都在入库时完成。
+安装目录和展示名统一为技能名称V版本号，更新直接替换旧安装。
 
 用法:
     python tools/skillctl.py list
@@ -24,6 +24,7 @@ import re
 import shutil
 import subprocess
 import sys
+from tempfile import TemporaryDirectory
 import unicodedata
 from datetime import datetime
 from difflib import unified_diff
@@ -35,14 +36,12 @@ MANIFEST = REPO / "manifest.json"
 
 TARGET = Path.home() / ".workbuddy" / "skills"
 STATE_FILE = TARGET / ".skillctl.json"
-BACKUP_DIR = TARGET.parent / ".skillctl_backup"
 
 
 def set_target(raw: str) -> None:
-    global TARGET, STATE_FILE, BACKUP_DIR
+    global TARGET, STATE_FILE
     TARGET = Path(raw).expanduser().resolve()
     STATE_FILE = TARGET / ".skillctl.json"
-    BACKUP_DIR = TARGET.parent / ".skillctl_backup"
 
 EXCLUDE_DIRS = {"__pycache__", ".git", "node_modules", ".skillctl_backup"}
 EXCLUDE_SUFFIX = {".pyc", ".pyo", ".DS_Store"}
@@ -127,8 +126,11 @@ def load_state() -> dict:
 
 def save_state(state: dict) -> None:
     TARGET.mkdir(parents=True, exist_ok=True)
-    STATE_FILE.write_text(json.dumps(state, ensure_ascii=False, indent=2) + "\n",
-                          encoding="utf-8", newline="\n")
+    with TemporaryDirectory(prefix=".skillctl-state-", dir=TARGET) as temp:
+        pending = Path(temp) / STATE_FILE.name
+        pending.write_text(json.dumps(state, ensure_ascii=False, indent=2) + "\n",
+                           encoding="utf-8", newline="\n")
+        pending.replace(STATE_FILE)
 
 
 def iter_files(root: Path):
@@ -181,26 +183,34 @@ def bump_version(version: str, level: str = "next") -> str:
 
 # ---------- 安装动作 ----------
 
-def backup_existing(path: Path) -> Path:
-    BACKUP_DIR.mkdir(parents=True, exist_ok=True)
-    stamp = datetime.now().strftime("%Y%m%d-%H%M%S")
-    dest = BACKUP_DIR / f"{path.name}-{stamp}"
-    shutil.copytree(path, dest)
-    return dest
+def installed_paths(name: str) -> list[Path]:
+    pattern = re.compile(rf"{re.escape(name)}(?:\s*[vV](\d+(?:\.\d+)+))?")
+    if not TARGET.is_dir():
+        return []
+    matches = [(path, pattern.fullmatch(path.name)) for path in TARGET.iterdir()
+               if path.is_dir() and not path.is_symlink() and not getattr(path, "is_junction", lambda: False)()]
+    return [path for path, match in sorted(
+        ((path, match) for path, match in matches if match),
+        key=lambda pair: parse_version(pair[1][1] or "0"), reverse=True)]
 
 
-def local_changed(name: str, state: dict) -> tuple:
-    """返回 (是否被本地改动, 说明)。没有安装记录时视为外部安装。"""
-    target = TARGET / name
-    if not target.is_dir():
-        return False, "未安装"
-    record = state["installed"].get(name)
-    if not record:
-        return True, "本地已存在但无安装记录"
-    now = digest(file_map(target))
-    if now != record.get("hash"):
-        return True, "安装后被改动过"
-    return False, ""
+def replace_display_name(root: Path, old: str, new: str, display_name: str | None = None) -> None:
+    for relative, replacement in {
+        "SKILL.md": lambda text: re.sub(
+            rf"(?m)^name:[ \t]*(?:{re.escape(old)}|\"{re.escape(old)}\"|'{re.escape(old)}')[ \t]*$",
+            lambda _: f"name: {new}", text, count=1),
+        "agents/openai.yaml": lambda text: re.sub(
+            rf"\${re.escape(old)}(?![\w.-])", lambda _: f"${new}",
+            re.sub(r'(?m)^([ \t]*display_name:[ \t]*).+$',
+                   lambda match: match[1] + json.dumps(display_name or new, ensure_ascii=False),
+                   text, count=1)),
+    }.items():
+        path = root / relative
+        if path.is_file():
+            text = path.read_text(encoding="utf-8")
+            updated = replacement(text)
+            if updated != text:
+                path.write_text(updated, encoding="utf-8", newline="\n")
 
 
 def copy_into_repo_name(src: Path, dst: Path) -> None:
@@ -210,61 +220,44 @@ def copy_into_repo_name(src: Path, dst: Path) -> None:
         "__pycache__", "*.pyc", ".skillctl*", "*.local.*"))
 
 
-def find_duplicates(name: str, src: Path) -> list:
-    """找出本地其他目录里正文完全相同的技能（改名遗留的旧副本）。"""
-    def body_hash(path: Path):
-        f = path / "SKILL.md"
-        if not f.exists():
-            return None
-        text = f.read_text(encoding="utf-8", errors="replace")
-        parts = text.split("---", 2)
-        body = parts[2] if len(parts) == 3 else text
-        return hashlib.sha256(body.strip().encode("utf-8")).hexdigest()
-
-    want = body_hash(src)
-    if not want or not TARGET.exists():
-        return []
-    found = []
-    for d in TARGET.iterdir():
-        if d.is_dir() and d.name != name and not d.name.startswith("."):
-            if body_hash(d) == want:
-                found.append(d.name)
-    return found
-
-
-def do_install(name: str, force: bool = False, quiet: bool = False) -> bool:
+def do_install(name: str, quiet: bool = False) -> None:
     src = repo_skill(name)
-    meta = read_skill_meta(src)
-    target = TARGET / name
+    version = read_skill_meta(src)["version"]
+    label = f"{name}V{version}"
+    target = TARGET / label
     state = load_state()
-
-    if target.exists():
-        changed, reason = local_changed(name, state)
-        if changed and not force:
-            fail(f"「{name}」{reason}，已停止，未做任何修改")
-            say(f"         先备份或确认丢弃，再加 --force 重跑")
-            return False
-        if changed:
-            dest = backup_existing(target)
-            warn(f"已备份旧版本到 {dest}")
-        shutil.rmtree(target)
-
+    old_paths = installed_paths(name)
+    if target.exists() and target not in old_paths:
+        raise SystemExit(f"安装路径已被占用：{target}")
     TARGET.mkdir(parents=True, exist_ok=True)
-    shutil.copytree(src, target)
-
-    state["installed"][name] = {
-        "version": meta["version"],
-        "hash": digest(file_map(target)),
-        "installed_at": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
-    }
-    save_state(state)
+    with TemporaryDirectory(prefix=".skillctl-", dir=TARGET) as temp:
+        staging = Path(temp)
+        prepared = staging / "new"
+        shutil.copytree(src, prepared)
+        replace_display_name(prepared, name, label)
+        moved = []
+        try:
+            for index, path in enumerate(old_paths):
+                displaced = staging / str(index)
+                path.rename(displaced)
+                moved.append((path, displaced))
+                state["installed"].pop(path.name, None)
+            prepared.rename(target)
+            state["installed"][name] = {
+                "version": version,
+                "directory": label,
+                "hash": digest(file_map(target)),
+                "installed_at": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+            }
+            save_state(state)
+        except BaseException:
+            if not prepared.exists():
+                target.rename(prepared)
+            for path, displaced in reversed(moved):
+                displaced.rename(path)
+            raise
     if not quiet:
-        ok(f"已安装「{name}」v{meta['version']} → {target}")
-        dups = find_duplicates(name, src)
-        if dups:
-            warn(f"发现疑似重复的旧技能：{'、'.join(dups)}")
-            say(f"         确认是同一份内容后，可删除：{TARGET / dups[0]}")
-    return True
+        ok(f"已安装「{label}」→ {target}")
 
 
 # ---------- 命令 ----------
@@ -288,24 +281,24 @@ def cmd_status(args) -> None:
     rows = []
     for s in data["skills"]:
         name = s["name"]
-        target = TARGET / name
+        paths = installed_paths(name)
         record = state["installed"].get(name)
-        if not target.exists():
+        if not paths:
             rows.append((name, s["version"], "—", "未安装", ""))
             continue
         local_v = record["version"] if record else "?"
+        target = paths[0]
         local_hash = digest(file_map(target))
-        repo_hash = digest(file_map(SKILLS_DIR / name))
         if not record:
             status = "本地有目录，无安装记录"
         elif local_hash != record["hash"]:
             status = "本地有改动"
         elif parse_version(s["version"]) > parse_version(record["version"]):
             status = "可更新"
-        elif local_hash == repo_hash:
+        elif str(local_v) == s["version"] and len(paths) == 1 and target.name == f'{name}V{s["version"]}':
             status = "已是最新"
         else:
-            status = "内容不一致"
+            status = "可更新"
         rows.append((name, s["version"], local_v, status, ""))
     say()
     say(pad("技能名", 22) + pad("仓库", 9) + pad("本地", 9) + "状态")
@@ -322,46 +315,31 @@ def cmd_status(args) -> None:
 
 
 def cmd_install(args) -> None:
-    if not do_install(args.name, force=args.force):
-        sys.exit(1)
+    do_install(args.name)
 
 
 def cmd_update(args) -> None:
-    data = load_manifest()
-    state = load_state()
-    targets = [s["name"] for s in data["skills"]] if args.all else [args.name]
-    changed = skipped = 0
+    targets = [s["name"] for s in load_manifest()["skills"]] if args.all else [args.name]
     for name in targets:
-        if not name:
-            continue
-        record = state["installed"].get(name)
-        if not record:
+        src = repo_skill(name)
+        paths = installed_paths(name)
+        if not paths:
             say(f"  [跳过] 「{name}」本地未安装")
             continue
-        repo_meta = read_skill_meta(SKILLS_DIR / name)
-        if parse_version(repo_meta["version"]) <= parse_version(record["version"]):
-            say(f"  [最新] 「{name}」v{record['version']}")
+        version = read_skill_meta(src)["version"]
+        if len(paths) == 1 and paths[0].name == f"{name}V{version}" and not args.force:
+            say(f"  [最新] 「{name}V{version}」")
             continue
-        say(f"  [更新] 「{name}」v{record['version']} → v{repo_meta['version']}")
-        if do_install(name, force=args.force, quiet=True):
-            changed += 1
-        else:
-            skipped += 1
-    say()
-    if changed:
-        say(f"更新完成，共处理 {changed} 个技能")
-    if skipped:
-        say(f"有 {skipped} 个技能因本地改动被拦下，逐个确认后用 --force 重跑")
-    if not changed and not skipped:
-        say("没有需要更新的技能")
+        do_install(name)
 
 
 def cmd_diff(args) -> None:
     name = args.name
     src = repo_skill(name)
-    target = TARGET / name
-    if not target.exists():
+    paths = installed_paths(name)
+    if not paths:
         raise SystemExit(f"本地未安装「{name}」，无需对比")
+    target = paths[0]
     repo_lines = (src / "SKILL.md").read_text(encoding="utf-8").splitlines()
     local_lines = (target / "SKILL.md").read_text(encoding="utf-8").splitlines()
     diff = list(unified_diff(local_lines, repo_lines,
@@ -400,8 +378,8 @@ def cmd_publish(args) -> None:
         raise SystemExit("发布必须填写非空 --note，说明变更内容与原因")
     if args.bump != "next":
         warn("--bump patch/minor/major 仅兼容旧命令；统一按 N.0 → (N+1).0 升版")
-    target = TARGET / name
-    if not target.is_dir():
+    paths = installed_paths(name)
+    if not paths:
         raise SystemExit(f"本地没有安装「{name}」，无从发布")
     dst = SKILLS_DIR / name
     is_new = not dst.exists()
@@ -413,7 +391,16 @@ def cmd_publish(args) -> None:
         old_version = read_skill_meta(dst).get("version", "")
         new_version = bump_version(old_version, args.bump)
 
+    target = paths[0]
+    interface = dst / "agents/openai.yaml"
+    display_name = None
+    if interface.is_file():
+        match = re.search(r'(?m)^\s*display_name:\s*"([^"]+)"', interface.read_text(encoding="utf-8"))
+        if match:
+            display_name = match[1]
     copy_into_repo_name(target, dst)
+    if target.name != name:
+        replace_display_name(dst, target.name, name, display_name)
 
     meta = json.loads((dst / "skill.json").read_text(encoding="utf-8")) \
         if (dst / "skill.json").exists() else {}
@@ -507,13 +494,13 @@ def main() -> None:
 
     p = sub.add_parser("install", help="安装技能到本地")
     p.add_argument("name")
-    p.add_argument("--force", action="store_true", help="本地有改动时强制覆盖（会先备份）")
+    p.add_argument("--force", action="store_true", help="兼容旧命令，安装始终替换旧版")
     p.set_defaults(func=cmd_install)
 
     p = sub.add_parser("update", help="更新已安装的技能")
     p.add_argument("name", nargs="?", default=None)
     p.add_argument("--all", action="store_true")
-    p.add_argument("--force", action="store_true")
+    p.add_argument("--force", action="store_true", help="重新安装当前版本")
     p.set_defaults(func=cmd_update)
 
     p = sub.add_parser("diff", help="对比本地与仓库内容")

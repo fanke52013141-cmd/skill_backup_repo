@@ -48,7 +48,8 @@ class PublishTests(unittest.TestCase):
         self.manifest = self.root / "manifest.json"
         self.manifest.write_text('{"schema":1,"skills":[]}', encoding="utf-8")
         self.scope = patch.multiple(skillctl, REPO=self.root, SKILLS_DIR=self.skills,
-                                    MANIFEST=self.manifest, TARGET=self.target)
+                                    MANIFEST=self.manifest, TARGET=self.target,
+                                    STATE_FILE=self.target / ".skillctl.json")
         self.scope.start()
         self.addCleanup(self.scope.stop)
         self.commit = patch.object(skillctl, "git_commit").start()
@@ -63,6 +64,35 @@ class PublishTests(unittest.TestCase):
     def publish(self, note="保留现有能力，补充说明", bump="next"):
         with contextlib.redirect_stdout(io.StringIO()):
             skillctl.cmd_publish(argparse.Namespace(name="示例技能", note=note, bump=bump))
+
+    def test_update_replaces_legacy_install_and_publish_restores_source_name(self):
+        self.source()
+        self.publish()
+        src = self.skills / "示例技能"
+        (src / "agents").mkdir()
+        (src / "agents/openai.yaml").write_text(
+            'interface:\n  display_name: "示例界面"\n', encoding="utf-8")
+        spaced = self.target / "示例技能 v0.5"
+        spaced.mkdir()
+        unrelated = self.target / "示例技能附录V1.0"
+        unrelated.mkdir()
+        args = argparse.Namespace(name="示例技能", all=False, force=False)
+        with contextlib.redirect_stdout(io.StringIO()):
+            skillctl.cmd_update(args)
+        current = self.target / "示例技能V1.0"
+        self.assertEqual(set(self.target.iterdir()),
+                         {current, unrelated, self.target / ".skillctl.json"})
+        self.assertFalse((self.root / ".skillctl_backup").exists())
+        self.assertIn("name: 示例技能V1.0", (current / "SKILL.md").read_text(encoding="utf-8"))
+        self.assertIn('display_name: "示例技能V1.0"',
+                      (current / "agents/openai.yaml").read_text(encoding="utf-8"))
+        self.publish()
+        self.assertIn("name: 示例技能\n", (src / "SKILL.md").read_text(encoding="utf-8"))
+        self.assertIn('display_name: "示例界面"', (src / "agents/openai.yaml").read_text(encoding="utf-8"))
+        with contextlib.redirect_stdout(io.StringIO()):
+            skillctl.cmd_update(args)
+        self.assertFalse(current.exists())
+        self.assertTrue((self.target / "示例技能V2.0").is_dir())
 
     def test_new_skill_starts_at_one(self):
         self.source()
