@@ -1,0 +1,23 @@
+{
+  "name": "PRD工程师-2.0",
+  "slug": "prd-engineer",
+  "version": "2.0",
+  "entry": "SKILL.md",
+  "summary": "把原型和交互说明转成前端可直接编码的 PRD，消灭一切模糊性",
+  "origin": "self",
+  "source": "桌面 skills库/prd-engineer.md",
+  "updated": "2026-10-26",
+  "category": "产品经理",
+  "subcategory": "需求文档",
+  "tags": [
+    "PRD",
+    "原型"
+  ],
+  "content_type": "Skill",
+  "id": "PRD工程师",
+  "repository": {
+    "url": "https://github.com/fanke52013141-cmd/skill_backup_repo.git",
+    "branch": "main",
+    "path": "skills/PRD工程师-2.0"
+  }
+}

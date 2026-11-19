@@ -23,9 +23,10 @@ def count_text(text):
 def check_repo(repo):
     problems, rows = [], []
     manifest = json.loads((repo / 'manifest.json').read_text(encoding='utf-8'))
-    index = {item['name']: item for item in manifest['skills']}
+    index = {item.get('id', item['name']): item for item in manifest['skills']}
     for name in NAMES:
-        folder = repo / 'skills' / name
+        entry = index[name]
+        folder = repo / 'skills' / entry['directory']
         meta = json.loads((folder / 'skill.json').read_text(encoding='utf-8'))
         text = (folder / 'SKILL.md').read_text(encoding='utf-8')
         match = re.match(r'\A---\n(.*?)\n---\n', text, re.S)
@@ -33,16 +34,17 @@ def check_repo(repo):
             problems.append(f'{name}: 无有效frontmatter')
             continue
         front = yaml.safe_load(match.group(1))
-        if front.get('name') != name or not isinstance(front.get('description'), str):
+        if front.get('name') != entry['name'] or not isinstance(front.get('description'), str):
             problems.append(f'{name}: frontmatter名称或描述无效')
         if not re.fullmatch(r'[\u4e00-\u9fff]+', name):
             problems.append(f'{name}: 本次要求中文名称')
-        if meta != index.get(name):
+        manifest_meta = {key: value for key, value in entry.items() if key != 'directory'}
+        if meta != manifest_meta:
             problems.append(f'{name}: manifest与skill.json不一致')
         if 'version' in front or (front.get('metadata') or {}).get('version'):
             problems.append(f'{name}: 版本不应重复写在frontmatter')
         ui = yaml.safe_load((folder / 'agents/openai.yaml').read_text(encoding='utf-8'))
-        if ui['interface']['display_name'] != name or f'${name}' not in ui['interface']['default_prompt']:
+        if ui['interface']['display_name'] != entry['name'] or f'${entry["name"]}' not in ui['interface']['default_prompt']:
             problems.append(f'{name}: UI元数据不一致')
         markdowns = sorted(folder.rglob('*.md'))
         totals = {'han': 0, 'editorial': 0, 'non_whitespace': 0}
@@ -74,7 +76,8 @@ def check_repo(repo):
             problems.append(f'{name}: 纯汉字少于一万 {totals["han"]}')
         rows.append({'name': name, **totals, 'markdown_files': len(markdowns), 'status': meta['status']})
 
-    schema_path = repo / 'skills/分镜板提示词/references/镜头组.schema.json'
+    storyboard_dir = index['分镜板提示词']['directory']
+    schema_path = repo / 'skills' / storyboard_dir / 'references/镜头组.schema.json'
     schema = json.loads(schema_path.read_text(encoding='utf-8'))
     Draft202012Validator.check_schema(schema)
     validator = Draft202012Validator(schema)

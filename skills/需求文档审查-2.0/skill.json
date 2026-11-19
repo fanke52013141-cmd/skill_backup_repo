@@ -1,0 +1,23 @@
+{
+  "name": "需求文档审查-2.0",
+  "slug": "prd-review-officer",
+  "version": "2.0",
+  "entry": "SKILL.md",
+  "summary": "对 PRD 做完整性、一致性、体验、可行性四轮审查，输出问题清单或评审报告",
+  "origin": "self",
+  "source": "桌面 skills库/需求文档审查.md",
+  "updated": "2026-10-26",
+  "category": "产品经理",
+  "subcategory": "需求审查",
+  "tags": [
+    "PRD",
+    "评审"
+  ],
+  "content_type": "Skill",
+  "id": "需求文档审查",
+  "repository": {
+    "url": "https://github.com/fanke52013141-cmd/skill_backup_repo.git",
+    "branch": "main",
+    "path": "skills/需求文档审查-2.0"
+  }
+}

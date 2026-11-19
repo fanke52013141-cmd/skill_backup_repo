@@ -1,9 +1,9 @@
 {
-  "schema": 1,
+  "schema": 2,
   "updated": "2026-11-19",
   "skills": [
     {
-      "name": "PRD工程师",
+      "name": "PRD工程师-2.0",
       "slug": "prd-engineer",
       "version": "2.0",
       "entry": "SKILL.md",
@@ -17,10 +17,17 @@
         "PRD",
         "原型"
       ],
-      "content_type": "Skill"
+      "content_type": "Skill",
+      "id": "PRD工程师",
+      "repository": {
+        "url": "https://github.com/fanke52013141-cmd/skill_backup_repo.git",
+        "branch": "main",
+        "path": "skills/PRD工程师-2.0"
+      },
+      "directory": "PRD工程师-2.0"
     },
     {
-      "name": "Vibe Coding教练",
+      "name": "Vibe Coding教练-2.0",
       "slug": "vibe-coding-coach",
       "version": "2.0",
       "entry": "SKILL.md",
@@ -35,10 +42,17 @@
         "MVP",
         "产品经理"
       ],
-      "content_type": "Skill"
+      "content_type": "Skill",
+      "id": "Vibe Coding教练",
+      "repository": {
+        "url": "https://github.com/fanke52013141-cmd/skill_backup_repo.git",
+        "branch": "main",
+        "path": "skills/Vibe Coding教练-2.0"
+      },
+      "directory": "Vibe Coding教练-2.0"
     },
     {
-      "name": "grill-with-docs",
+      "name": "grill-with-docs-2.0",
       "slug": "grill-with-docs",
       "version": "2.0",
       "entry": "SKILL.md",
@@ -60,10 +74,17 @@
         "需求追问",
         "技术决策"
       ],
-      "content_type": "Skill"
+      "content_type": "Skill",
+      "id": "grill-with-docs",
+      "repository": {
+        "url": "https://github.com/fanke52013141-cmd/skill_backup_repo.git",
+        "branch": "main",
+        "path": "skills/grill-with-docs-2.0"
+      },
+      "directory": "grill-with-docs-2.0"
     },
     {
-      "name": "handoff",
+      "name": "handoff-2.0",
       "slug": "handoff",
       "version": "2.0",
       "entry": "SKILL.md",
@@ -82,10 +103,17 @@
         "Agent",
         "会话交接"
       ],
-      "content_type": "Skill"
+      "content_type": "Skill",
+      "id": "handoff",
+      "repository": {
+        "url": "https://github.com/fanke52013141-cmd/skill_backup_repo.git",
+        "branch": "main",
+        "path": "skills/handoff-2.0"
+      },
+      "directory": "handoff-2.0"
     },
     {
-      "name": "公考遴选需求探索",
+      "name": "公考遴选需求探索-2.0",
       "slug": "gongkao-linxuan-demand-discovery",
       "version": "2.0",
       "entry": "SKILL.md",
@@ -100,10 +128,17 @@
         "遴选",
         "需求分析"
       ],
-      "content_type": "Skill"
+      "content_type": "Skill",
+      "id": "公考遴选需求探索",
+      "repository": {
+        "url": "https://github.com/fanke52013141-cmd/skill_backup_repo.git",
+        "branch": "main",
+        "path": "skills/公考遴选需求探索-2.0"
+      },
+      "directory": "公考遴选需求探索-2.0"
     },
     {
-      "name": "公选王PRD撰写专家",
+      "name": "公选王PRD撰写专家-4.0",
       "slug": "concise-prd-writer",
       "version": "4.0",
       "entry": "SKILL.md",
@@ -119,10 +154,17 @@
         "PRD",
         "公选王"
       ],
-      "content_type": "Skill"
+      "content_type": "Skill",
+      "id": "公选王PRD撰写专家",
+      "repository": {
+        "url": "https://github.com/fanke52013141-cmd/skill_backup_repo.git",
+        "branch": "main",
+        "path": "skills/公选王PRD撰写专家-4.0"
+      },
+      "directory": "公选王PRD撰写专家-4.0"
     },
     {
-      "name": "分镜板提示词",
+      "name": "分镜板提示词-2.0",
       "slug": "storyboard-panel-prompts",
       "version": "2.0",
       "entry": "SKILL.md",
@@ -138,10 +180,17 @@
         "图片生成",
         "分镜预演"
       ],
-      "content_type": "Skill"
+      "content_type": "Skill",
+      "id": "分镜板提示词",
+      "repository": {
+        "url": "https://github.com/fanke52013141-cmd/skill_backup_repo.git",
+        "branch": "main",
+        "path": "skills/分镜板提示词-2.0"
+      },
+      "directory": "分镜板提示词-2.0"
     },
     {
-      "name": "场景视觉设计",
+      "name": "场景视觉设计-2.0",
       "slug": "scene-visual-design",
       "version": "2.0",
       "entry": "SKILL.md",
@@ -157,10 +206,17 @@
         "图片生成",
         "场景一致性"
       ],
-      "content_type": "Skill"
+      "content_type": "Skill",
+      "id": "场景视觉设计",
+      "repository": {
+        "url": "https://github.com/fanke52013141-cmd/skill_backup_repo.git",
+        "branch": "main",
+        "path": "skills/场景视觉设计-2.0"
+      },
+      "directory": "场景视觉设计-2.0"
     },
     {
-      "name": "广告创意总监",
+      "name": "广告创意总监-2.0",
       "slug": "ad-creative-director",
       "version": "2.0",
       "entry": "SKILL.md",
@@ -176,10 +232,17 @@
         "广告文案",
         "营销方案"
       ],
-      "content_type": "Skill"
+      "content_type": "Skill",
+      "id": "广告创意总监",
+      "repository": {
+        "url": "https://github.com/fanke52013141-cmd/skill_backup_repo.git",
+        "branch": "main",
+        "path": "skills/广告创意总监-2.0"
+      },
+      "directory": "广告创意总监-2.0"
     },
     {
-      "name": "技能构建专家",
+      "name": "技能构建专家-3.0",
       "slug": "skill-architecture-expert",
       "version": "3.0",
       "entry": "SKILL.md",
@@ -197,10 +260,17 @@
         "触发优化",
         "安全校验"
       ],
-      "content_type": "Skill"
+      "content_type": "Skill",
+      "id": "技能构建专家",
+      "repository": {
+        "url": "https://github.com/fanke52013141-cmd/skill_backup_repo.git",
+        "branch": "main",
+        "path": "skills/技能构建专家-3.0"
+      },
+      "directory": "技能构建专家-3.0"
     },
     {
-      "name": "报告可视化",
+      "name": "报告可视化-2.0",
       "slug": "paper-navy-visual-report",
       "version": "2.0",
       "entry": "SKILL.md",
@@ -215,10 +285,17 @@
         "通用报告",
         "网页展示"
       ],
-      "content_type": "Skill"
+      "content_type": "Skill",
+      "id": "报告可视化",
+      "repository": {
+        "url": "https://github.com/fanke52013141-cmd/skill_backup_repo.git",
+        "branch": "main",
+        "path": "skills/报告可视化-2.0"
+      },
+      "directory": "报告可视化-2.0"
     },
     {
-      "name": "提示词工程师",
+      "name": "提示词工程师-2.0",
       "slug": "prompt-engineer",
       "version": "2.0",
       "entry": "SKILL.md",
@@ -232,10 +309,17 @@
         "提示词优化",
         "通用能力"
       ],
-      "content_type": "Skill"
+      "content_type": "Skill",
+      "id": "提示词工程师",
+      "repository": {
+        "url": "https://github.com/fanke52013141-cmd/skill_backup_repo.git",
+        "branch": "main",
+        "path": "skills/提示词工程师-2.0"
+      },
+      "directory": "提示词工程师-2.0"
     },
     {
-      "name": "蒸馏万物skill",
+      "name": "蒸馏万物skill-1.0",
       "slug": "cangjie-skill",
       "version": "1.0",
       "entry": "SKILL.md",
@@ -257,10 +341,17 @@
         "Skill 生成",
         "长内容"
       ],
-      "content_type": "Skill"
+      "content_type": "Skill",
+      "id": "蒸馏万物skill",
+      "repository": {
+        "url": "https://github.com/fanke52013141-cmd/skill_backup_repo.git",
+        "branch": "main",
+        "path": "skills/蒸馏万物skill-1.0"
+      },
+      "directory": "蒸馏万物skill-1.0"
     },
     {
-      "name": "视频视觉开发总监",
+      "name": "视频视觉开发总监-2.0",
       "slug": "video-visual-development",
       "version": "2.0",
       "entry": "SKILL.md",
@@ -276,10 +367,17 @@
         "视觉风格",
         "美术规范"
       ],
-      "content_type": "Skill"
+      "content_type": "Skill",
+      "id": "视频视觉开发总监",
+      "repository": {
+        "url": "https://github.com/fanke52013141-cmd/skill_backup_repo.git",
+        "branch": "main",
+        "path": "skills/视频视觉开发总监-2.0"
+      },
+      "directory": "视频视觉开发总监-2.0"
     },
     {
-      "name": "视频镜头提示词",
+      "name": "视频镜头提示词-2.0",
       "slug": "video-shot-prompts",
       "version": "2.0",
       "entry": "SKILL.md",
@@ -295,10 +393,17 @@
         "视频提示词",
         "运镜"
       ],
-      "content_type": "Skill"
+      "content_type": "Skill",
+      "id": "视频镜头提示词",
+      "repository": {
+        "url": "https://github.com/fanke52013141-cmd/skill_backup_repo.git",
+        "branch": "main",
+        "path": "skills/视频镜头提示词-2.0"
+      },
+      "directory": "视频镜头提示词-2.0"
     },
     {
-      "name": "角色视觉设计",
+      "name": "角色视觉设计-2.0",
       "slug": "character-visual-design",
       "version": "2.0",
       "entry": "SKILL.md",
@@ -314,10 +419,17 @@
         "图片生成",
         "角色一致性"
       ],
-      "content_type": "Skill"
+      "content_type": "Skill",
+      "id": "角色视觉设计",
+      "repository": {
+        "url": "https://github.com/fanke52013141-cmd/skill_backup_repo.git",
+        "branch": "main",
+        "path": "skills/角色视觉设计-2.0"
+      },
+      "directory": "角色视觉设计-2.0"
     },
     {
-      "name": "需求文档审查",
+      "name": "需求文档审查-2.0",
       "slug": "prd-review-officer",
       "version": "2.0",
       "entry": "SKILL.md",
@@ -331,10 +443,17 @@
         "PRD",
         "评审"
       ],
-      "content_type": "Skill"
+      "content_type": "Skill",
+      "id": "需求文档审查",
+      "repository": {
+        "url": "https://github.com/fanke52013141-cmd/skill_backup_repo.git",
+        "branch": "main",
+        "path": "skills/需求文档审查-2.0"
+      },
+      "directory": "需求文档审查-2.0"
     },
     {
-      "name": "项目结构可视化",
+      "name": "项目结构可视化-2.0",
       "slug": "project_visualizer",
       "version": "2.0",
       "entry": "SKILL.md",
@@ -349,7 +468,19 @@
         "可视化",
         "GitHub"
       ],
-      "content_type": "Skill"
+      "content_type": "Skill",
+      "id": "项目结构可视化",
+      "repository": {
+        "url": "https://github.com/fanke52013141-cmd/skill_backup_repo.git",
+        "branch": "main",
+        "path": "skills/项目结构可视化-2.0"
+      },
+      "directory": "项目结构可视化-2.0"
     }
-  ]
+  ],
+  "repository": {
+    "url": "https://github.com/fanke52013141-cmd/skill_backup_repo.git",
+    "branch": "main"
+  },
+  "prompts": []
 }

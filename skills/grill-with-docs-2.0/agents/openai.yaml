@@ -1,0 +1,6 @@
+interface:
+  display_name: "grill-with-docs-2.0"
+  short_description: "Grill a design and write its docs"
+  default_prompt: "请使用 $grill-with-docs-2.0-2.0，通过追问澄清设计并同步维护项目文档。"
+policy:
+  allow_implicit_invocation: false

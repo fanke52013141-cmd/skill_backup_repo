@@ -1,0 +1,24 @@
+{
+  "name": "报告可视化-2.0",
+  "slug": "paper-navy-visual-report",
+  "version": "2.0",
+  "entry": "SKILL.md",
+  "summary": "生成左侧菜单 + 米白纸张 + 深海军蓝的编辑型研究报告页面",
+  "origin": "adapted",
+  "source": "桌面 skills库/报告可视化-skill.zip（原作 paper-navy-visual-report）",
+  "updated": "2026-10-26",
+  "audit": "2026-09-01 审计通过：无 P0/P1 风险；P2 提示——只做本地静态校验，无数据外发",
+  "category": "产品经理",
+  "subcategory": "分析与表达",
+  "tags": [
+    "通用报告",
+    "网页展示"
+  ],
+  "content_type": "Skill",
+  "id": "报告可视化",
+  "repository": {
+    "url": "https://github.com/fanke52013141-cmd/skill_backup_repo.git",
+    "branch": "main",
+    "path": "skills/报告可视化-2.0"
+  }
+}

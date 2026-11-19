@@ -1,30 +1,42 @@
-# 仓库协作规则
+# 仓库维护规则
 
-## Skill 版本与备注
+## 收录边界
 
-- 新发布版本统一使用 `N.0`，按 `1.0 → 2.0 → 3.0 → 4.0 → 5.0 → 6.0` 整数递增。
-- 每次正式更新均将整数部分加一；不区分 patch、minor、major，不生成 `2.1`、`2.0.1` 等版本。
-- 历史三段版本和旧变更记录原样保留，不批量改号。旧版下一次发布取第一段整数加一，如 `2.0.0 → 3.0`；新增 Skill 从 `1.0` 开始。
-- 单技能版本唯一真源是 `skills/<名称>/skill.json`。更新版本、日期、验证备注后，使用 `tools/skillctl.py` 的索引函数同步 `manifest.json`；README 中展示的版本同步更新。SKILL.md 不重复记录版本号。
-- 每次升版在 CHANGELOG.md 最上方记录日期、技能名、旧版 → 新版、修改内容、原因和验证限制。保留历史记录；版本备注不能只写“优化”。
-- 发布命令必须带非空 `--note`；旧 `--bump patch/minor/major` 仅保留命令兼容性，行为全部为整数递增。
+- 只保留 Skill、Prompt 包、运行所需资源、管理工具、测试、索引和版本记录。
+- 不保留原始提示词散文件、研究过程记录、临时验证报告、废弃操作文档、重复旧目录或测试缓存。
+- 当前不恢复已删除的 Prompt 内容；新增 Prompt 必须使用完整包结构，不得重新存成无版本 TXT。
 
-## 本地安装与更新
+## 统一身份与命名
 
-- 从本仓库安装或更新任何 Skill 时，本地目录、`SKILL.md` 的触发名及已有界面展示名统一为 `<技能名称>V<版本号>`。使用大写 V，名称和版本之间不加空格，例如 `视频镜头提示词V2.0`。版本号取自该 Skill 的 `skill.json`。
-- 安装新版本时直接替换本地同一 Skill 的旧安装，包括沿用旧命名的目录。成功后只保留当前版本，不建立旧版备份。回看旧版使用仓库 Git 历史。
-- 此规则适用于安装工具和手动部署。仓库内的源目录与元数据仍使用原技能名称。
+- 每个 Skill/Prompt 使用稳定 `id` 作为命令参数和资产身份，升版时不变。
+- `name`、仓库目录、Agent 本地安装目录、SKILL.md frontmatter 和 UI 显示名统一为 `<id>-<N.0>`。
+- 版本只允许 `1.0 → 2.0 → 3.0 → 4.0` 整数递增；新资产从 `1.0` 开始。
+- `skill.json` / `prompt.json` 是单资产版本与来源真源；`manifest.json` 是机器索引。
+- 每个资产必须记录 `repository.url`、`repository.branch`、`repository.path`，升版时同步更新 path。
+- 不在工作区堆叠多个历史版本；历史通过 Git 提交追溯。
 
-## 验证与修改边界
+## 安装与更新
 
-- 仓库是技能源文件；未要求安装时，不覆盖用户安装目录。
-- 改动 Skill 时同步其模板、示例和相关回归项，避免示例引导与规则相反。
-- 运行 `python tools/skillctl.py verify`。修改版本工具时运行 `python -m unittest discover -s tools -p test_skillctl.py`。
-- 区分结构检查、作者桌面演练、独立生成和真实材料端到端验证；未执行的验证写明待执行。
-- 不重写历史版本、不强制推送、不把其他 Skill 的内容顺带修改。
+- 使用 `tools/skillctl.py` 管理 Skill，使用 `tools/promptctl.py` 管理 Prompt。
+- 安装和更新后的本地目录必须带版本号，安装状态记录版本、目录、GitHub 来源和哈希。
+- 正常更新移除旧版本目录；本地有修改时不得静默覆盖，`--force` 覆盖前必须备份。
+- 未明确要求安装时，不修改用户实际 Agent 安装目录。
 
-## 分类维护
+## 发布与 GitHub 同步
 
-- 一级分类统一为：提示词与 Skill 构建、视频创作、产品经理、开发相关、其他。按主要工作用途归类，交叉用途使用 tags，不移动或复制现有技能目录。
-- 分类字段唯一真源是各技能 skill.json：category、subcategory、content_type、tags；通过 skillctl 的 save_manifest 索引函数生成 manifest，并同步 README 与分类索引。
-- 新内容优先归现有分类；暂不能归类时放其他，后续有实际需求再扩展。原始提示词保持来源存档身份，并链接对应 Skill。
+- 发布命令：`python tools/<skillctl|promptctl>.py publish <稳定ID> --note "<变更内容与原因>"`。
+- 备注必须具体说明变更内容与原因，不得只写“优化”。
+- 发布默认推送 GitHub；`--no-push` 仅用于明确的本地发布，不得宣称线上已同步。
+- 发布前检查本地与仓库版本一致、暂存区无既有修改、线上无本地尚未包含的新提交。
+- 升版时同步资产元数据、frontmatter、UI、manifest、README、分类索引与 CHANGELOG。
+- Git 提交只包含本次相关路径，不使用无范围的 `git add -A`。
+- 推送成功后才切换 Agent 本地安装版本；推送失败时明确报告仓库与本地状态，不伪造同步成功。
+- 不强推、不重写 Git 历史、不覆盖线上较新版本。
+
+## 验证
+
+- Skill 结构或元数据变更后运行 `python tools/skillctl.py verify`。
+- Prompt 结构或元数据变更后运行 `python tools/promptctl.py verify`。
+- 修改安装、版本或发布逻辑后运行 `python -m unittest discover -s tools -p test_skillctl.py`。
+- 修改五个视频 Skill 后运行 `python tools/validate_video_skills.py`。
+- 区分结构检查、模拟发布、真实 GitHub 推送和实际生成效果；未执行的验证不得写成已通过。
