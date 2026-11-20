@@ -1,6 +1,6 @@
 {
   "schema": 2,
-  "updated": "2026-11-19",
+  "updated": "2026-11-20",
   "skills": [
     {
       "name": "PRD工程师-2.0",
@@ -482,5 +482,20 @@
     "url": "https://github.com/fanke52013141-cmd/skill_backup_repo.git",
     "branch": "main"
   },
-  "prompts": []
+  "prompts": [
+    {
+      "id": "角色匹配助手",
+      "name": "角色匹配助手-1.0",
+      "version": "1.0",
+      "entry": "PROMPT.md",
+      "summary": "给用户匹配专业的人进行沉浸式聊天，或者某个领域的内容探讨",
+      "repository": {
+        "url": "https://github.com/fanke52013141-cmd/skill_backup_repo.git",
+        "branch": "main",
+        "path": "prompts/角色匹配助手-1.0"
+      },
+      "updated": "2026-11-20",
+      "directory": "角色匹配助手-1.0"
+    }
+  ]
 }
