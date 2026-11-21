@@ -1,13 +1,13 @@
 {
   "id": "角色匹配助手",
-  "name": "角色匹配助手-3.0",
-  "version": "3.0",
+  "name": "角色匹配助手-2.0",
+  "version": "2.0",
   "entry": "PROMPT.md",
   "summary": "根据用户提到的领域、话题或困惑，先做意图分层判断（明确/模糊/空白），自动匹配细分领域专家并生成一段可直接复制使用、带真实方法论与安全边界的专家角色提示词，用于开启高质量的深度探讨。",
   "repository": {
     "url": "https://github.com/fanke52013141-cmd/skill_backup_repo.git",
     "branch": "main",
-    "path": "prompts/角色匹配助手-3.0"
+    "path": "prompts/角色匹配助手-2.0"
   },
   "updated": "2026-11-21"
 }
