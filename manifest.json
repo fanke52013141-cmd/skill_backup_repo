@@ -1,6 +1,6 @@
 {
   "schema": 2,
-  "updated": "2026-11-20",
+  "updated": "2026-11-21",
   "skills": [
     {
       "name": "PRD工程师-2.0",
@@ -483,6 +483,20 @@
     "branch": "main"
   },
   "prompts": [
+    {
+      "id": "第一性原理专家",
+      "name": "第一性原理专家-1.0",
+      "version": "1.0",
+      "entry": "PROMPT.md",
+      "summary": "用第一性原理来分析问题。",
+      "repository": {
+        "url": "https://github.com/fanke52013141-cmd/skill_backup_repo.git",
+        "branch": "main",
+        "path": "prompts/第一性原理专家-1.0"
+      },
+      "updated": "2026-11-21",
+      "directory": "第一性原理专家-1.0"
+    },
     {
       "id": "角色匹配助手",
       "name": "角色匹配助手-1.0",

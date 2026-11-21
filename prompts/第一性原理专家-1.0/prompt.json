@@ -1,0 +1,13 @@
+{
+  "id": "第一性原理专家",
+  "name": "第一性原理专家-1.0",
+  "version": "1.0",
+  "entry": "PROMPT.md",
+  "summary": "用第一性原理来分析问题。",
+  "repository": {
+    "url": "https://github.com/fanke52013141-cmd/skill_backup_repo.git",
+    "branch": "main",
+    "path": "prompts/第一性原理专家-1.0"
+  },
+  "updated": "2026-11-21"
+}
