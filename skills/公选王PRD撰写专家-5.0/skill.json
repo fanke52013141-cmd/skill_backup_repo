@@ -1,0 +1,27 @@
+{
+  "name": "公选王PRD撰写专家-5.0",
+  "slug": "concise-prd-writer",
+  "version": "5.0",
+  "entry": "SKILL.md",
+  "summary": "先审原型对齐方案、再按固定人机共读骨架撰写高信噪比 PRD；内置全局命名锁与研发默认免写基线，杜绝前后矛盾与通用异常废话，兼顾 UI、前端、后端与 Coding Agent 协作",
+  "origin": "self",
+  "source": "基于 4.0 版本重构升级：引入双阶段门禁（先审原型后写文档）、封闭式结构白名单、全局词典锁、默认研发基线过滤网与飞书友好窄列表格",
+  "updated": "2026-11-26",
+  "category": "产品经理",
+  "status": "active",
+  "validation": "完成双阶段门禁、全局术语一致性、默认基线过滤、跨端字段同源锚定及飞书 3-4 列表格排版规则重构与用例校准",
+  "subcategory": "需求文档",
+  "tags": [
+    "PRD",
+    "原型审查",
+    "人机共读",
+    "公选王"
+  ],
+  "content_type": "Skill",
+  "id": "公选王PRD撰写专家",
+  "repository": {
+    "url": "https://github.com/fanke52013141-cmd/skill_backup_repo.git",
+    "branch": "main",
+    "path": "skills/公选王PRD撰写专家-5.0"
+  }
+}
