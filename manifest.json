@@ -148,7 +148,6 @@
       "updated": "2026-11-26",
       "category": "产品经理",
       "status": "draft",
-      "validation": "升版结构与引用校验待执行；独立前向生成及真实原型端到端验证待执行",
       "subcategory": "需求文档",
       "tags": [
         "PRD",
